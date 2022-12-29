@@ -8,6 +8,12 @@ import { LatitudeLongitude } from "./LatitudeLongitude";
  * @see https://www.mlit.go.jp/plateau/learning/tpc03-1/#p3_1
  */
 export class JapanStandardRegionalMeshUtil {
+
+  /**
+   * 一次メッシュにおける、緯度の単位。
+   * 一次メッシュが1変わると、緯度は2/3度変わる
+   * @private
+   */
   private static readonly primaryLatUnit: number = (1 / 60) * 40;
 
 
@@ -15,7 +21,25 @@ export class JapanStandardRegionalMeshUtil {
    * 指定されたメッシュコードの、南西端（平面状では左下端）の緯度経度を返します。
    * @param mesh
    */
-  static toLongitudeLatitude(mesh: string): LatitudeLongitude {
+  static toLongitudeLatitude(mesh: string): LatitudeLongitude | null {
+
+    if(Number.isNaN(Number(mesh))){
+      console.warn("メッシュコードが10進数以外で指定されています。変換ができないため、nullを返します。");
+      return null
+    }
+
+    switch (mesh.length){
+      case 4:
+      case 6:
+      case 8:
+      case 9:
+      case 10:
+        break;
+      default:
+        console.warn(`メッシュコードの桁数${mesh.length}は不正です。変換ができないため、nullを返します。`);
+        return null;
+    }
+
     const toPrimaryLatLng = (mesh: string):LatitudeLongitude =>{
       const latLng = new LatitudeLongitude();
       const primaryMeshCode = mesh.slice(0, 4);
@@ -23,8 +47,8 @@ export class JapanStandardRegionalMeshUtil {
       latLng.lng = Number(primaryMeshCode.slice(2, 4)) + 100;
       return latLng;
     }
-
     const latLng = toPrimaryLatLng(mesh);
+
     if (mesh.length === 4) {
       return latLng;
     }
@@ -36,6 +60,7 @@ export class JapanStandardRegionalMeshUtil {
       latLng.lng += Number(secondaryMeshCode.slice(1, 2)) / 8;
     }
     toSecondaryLatLng( latLng, mesh );
+
     if (mesh.length === 6) {
       return latLng;
     }
@@ -47,7 +72,6 @@ export class JapanStandardRegionalMeshUtil {
       latLng.lng += Number(tertiaryMeshCode.slice(1, 2)) / 8 / 10;
     }
     toTertiaryLatLng(latLng, mesh)
-    console.log( latLng, mesh );
 
     return latLng;
   }
