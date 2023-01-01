@@ -4,7 +4,13 @@
   "description": "City-size map utility for three.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest",
+    "start:dev": "npm run server & npm run watch:tsc & npm run watch:demo",
+    "buildTS": "tsc --project tsconfig.json",
+    "watch:tsc": "tsc -W --incremental --project tsconfig.json",
+    "demo": "npx @masatomakino/gulptask-demo-page --copyTargets 'png','jpg','jpeg','obj'",
+    "watch:demo": "npm run demo -- -W",
+    "server": "npx browser-sync ./docs/demo -w"
   },
   "repository": {
     "type": "git",
@@ -17,6 +23,7 @@
   },
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
+    "@masatomakino/gulptask-demo-page": "^0.5.3",
     "@types/jest": "^29.2.5",
     "@types/three": "^0.147.1",
     "@types/utm": "^1.1.1",
