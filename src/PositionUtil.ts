@@ -9,7 +9,11 @@ export class PositionUtil {
    * 緯度経度をUTM平面座標に変換する
    * unit : meter
    *
+   * three.jsの座標系はZ軸が奥行きを表し、
+   *
    * TODO : zoneを跨いだ場合正常な値が取得できない。
+   * TODO : z軸を反転させるのは正しいのか確認。
+   * TODO : プラトーモデル状にダミーモデルを置いて確認。
    *
    * @param latLng
    * @param origin

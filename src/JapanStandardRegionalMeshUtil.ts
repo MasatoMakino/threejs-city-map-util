@@ -10,6 +10,8 @@ import { LatitudeLongitude } from "./LatitudeLongitude";
  *
  * PLATEAUプラットフォームはファイル命名形式に基準地域メッシュコードを利用しています。
  * @see https://www.mlit.go.jp/plateau/learning/tpc03-1/#p3_1
+ *
+ * TODO : プラトーモデルの設置テスト
  */
 export class JapanStandardRegionalMeshUtil {
   /**
@@ -23,12 +25,12 @@ export class JapanStandardRegionalMeshUtil {
    * 指定されたメッシュコードの、南西端（平面状では左下端）の緯度経度を返します。
    * @param mesh
    */
-  static toLongitudeLatitude(mesh: string): LatitudeLongitude | null {
+  static toLongitudeLatitude(mesh: string): LatitudeLongitude | undefined {
     if (Number.isNaN(Number(mesh))) {
       console.warn(
-        "メッシュコードが10進数以外で指定されています。変換ができないため、nullを返します。"
+        "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。"
       );
-      return null;
+      return undefined;
     }
 
     switch (mesh.length) {
@@ -40,9 +42,9 @@ export class JapanStandardRegionalMeshUtil {
         break;
       default:
         console.warn(
-          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、nullを返します。`
+          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、undefinedを返します。`
         );
-        return null;
+        return undefined;
     }
 
     const toPrimaryLatLng = (mesh: string): LatitudeLongitude => {
