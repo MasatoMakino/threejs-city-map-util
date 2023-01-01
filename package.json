@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
+    "@types/three": "^0.147.1",
+    "@types/utm": "^1.1.1",
     "husky": "^8.0.2",
     "prettier": "^2.8.1",
     "pretty-quick": "^3.1.3",
