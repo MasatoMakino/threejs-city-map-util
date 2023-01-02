@@ -16,14 +16,14 @@ export class Common {
   }
 
   static initLight(scene: Scene) {
-    const ambientLight = new AmbientLight(0xffffff, 1.0);
+    const ambientLight = new AmbientLight(0xffffff, 0.2);
     scene.add(ambientLight);
     return ambientLight;
   }
 
-  static initCamera(scene: Scene, W: number, H: number, near = 1, far = 400) {
+  static initCamera(scene: Scene, W: number, H: number, near = 0.01, far = 400000000000) {
     const camera = new PerspectiveCamera(45, W / H, near, far);
-    camera.position.set(0, 0, 100);
+    camera.position.set(0, 0, 500);
     camera.updateMatrixWorld(false);
     scene.add(camera);
     return camera;
@@ -42,7 +42,7 @@ export class Common {
   static initRenderer(W: number, H: number, option: any) {
     option = Object.assign(
       {
-        color: 0x000000,
+        color: 0x888888,
       },
       option
     );
@@ -56,7 +56,7 @@ export class Common {
   }
 
   static initHelper(scene: Scene) {
-    const axesHelper = new AxesHelper(20);
+    const axesHelper = new AxesHelper(2000);
     scene.add(axesHelper);
     return axesHelper;
   }
