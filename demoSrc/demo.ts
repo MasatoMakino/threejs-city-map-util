@@ -1,7 +1,6 @@
-import {Fog, Mesh, MeshBasicMaterial} from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 import { Common } from "./Common";
-import { PlateauModelUtil} from "../src";
+import { LatitudeLongitude, PlateauModelUtil, PositionUtil } from "../src";
 
 export class Demo {
   private renderer;
@@ -20,15 +19,43 @@ export class Demo {
     Common.initHelper(this.scene);
 
     this.load();
+
     this.render();
   }
 
-  async load(){
-    const model = await PlateauModelUtil.loadObjModel("./53393599_bldg_6677.obj");
-    // console.log( model );
-    // model.position.y += 37500;
-    // model.position.x += 8200;
-    this.scene.add( model );
+  async load() {
+    const origin = new LatitudeLongitude(
+      35.65833333333333 + 2 / 3 / 8 / 10 / 2,
+      139.7375 + 1 / 160
+    );
+    const model = await PlateauModelUtil.loadObjModel(
+      "./53393599_bldg_6677.obj",
+      origin
+    );
+    if (model) {
+      this.scene.add(model);
+
+      const dummy = new Mesh(
+        new SphereGeometry(10, 10),
+        new MeshBasicMaterial()
+      );
+
+      //東京タワー
+      const targetLatLng = new LatitudeLongitude(
+        35.65864183184921,
+        139.74544075634395
+      );
+      const targetPos = PositionUtil.toTransverseMercatorXZ(
+        targetLatLng,
+        model.userData.origin
+      );
+      dummy.position.copy(targetPos);
+      this.scene.add(dummy);
+
+      const dummyTop = dummy.clone();
+      dummyTop.position.y = 333;
+      this.scene.add(dummyTop);
+    }
   }
   render() {
     requestAnimationFrame(() => {

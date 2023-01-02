@@ -23,25 +23,44 @@ export class PlateauModelUtil {
   /**
    * PLATEAUモデルをロードし、コンテナ内に配置できるよう回転する。
    */
-  static async loadObjModel(url: string): Promise<Mesh | undefined> {
+  static async loadObjModel(
+    url: string,
+    origin: LatitudeLongitude
+  ): Promise<Mesh | undefined> {
     const txt = await fetch(url);
     const str = await txt.text();
-    const shift = this.getShiftMeters(url, str);
+
+    const meshCode = PlateauModelUtil.getMeshCode(url);
+    if (meshCode == null) return undefined;
+    const meshCodeLatLng =
+      JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
+    if (meshCodeLatLng == null) return undefined;
+
+    const zone = this.getZone(str);
+    const shift = this.getShiftMeters(meshCodeLatLng, zone);
     if (shift == null) return undefined;
 
     const group = new OBJLoader().parse(str);
     const mesh = group.children[0] as Mesh;
     if (mesh == null) return undefined;
 
-    mesh.position.x -= shift.x;
-    mesh.position.y -= shift.z;
+    mesh.userData.meshCode = meshCode;
+    mesh.userData.meshCodeLatLng = meshCodeLatLng;
+    mesh.userData.zone = zone;
+    mesh.userData.origin = origin;
+
+    //shift geometry
+    mesh.geometry.translate(-shift.x, shift.z, 0);
+    mesh.geometry.rotateX(-Math.PI / 2);
+
+    //shift mesh position
+    const meshPos = PositionUtil.toTransverseMercatorXZ(meshCodeLatLng, origin);
+    mesh.position.add(meshPos);
+
     return mesh;
   }
 
-  private static getShiftMeters = (
-    url: string,
-    objString: string
-  ): Vector3 | undefined => {
+  private static getZone = (objString: string) => {
     const getLatitudeOfOrigin = (str: string): number | undefined => {
       const match = str.match(/PARAMETER\["latitude_of_origin",([\d\.]+)\]/);
       if (match) {
@@ -60,15 +79,13 @@ export class PlateauModelUtil {
     };
     const longitudeOfOrigin = getLongitudeOfOrigin(objString);
 
-    const meshCode = PlateauModelUtil.getMeshCode(url);
-    if (meshCode == null) return undefined;
-    const meshLatLng =
-      JapanStandardRegionalMeshUtil.toLongitudeLatitude(meshCode);
-    if (meshLatLng == null) return undefined;
+    return new LatitudeLongitude(latitudeOfOrigin, longitudeOfOrigin);
+  };
 
-    return PositionUtil.toTransverseMercatorXZ(
-      meshLatLng,
-      new LatitudeLongitude(latitudeOfOrigin, longitudeOfOrigin)
-    );
+  private static getShiftMeters = (
+    meshCodeLatLng: LatitudeLongitude,
+    zone: LatitudeLongitude
+  ): Vector3 | undefined => {
+    return PositionUtil.toTransverseMercatorXZ(meshCodeLatLng, zone);
   };
 }
