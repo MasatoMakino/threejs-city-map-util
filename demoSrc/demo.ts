@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, SphereGeometry } from "three";
+import {Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, TextureLoader} from "three";
 import { Common } from "./Common";
 import { LatitudeLongitude, PlateauModelUtil, PositionUtil } from "../src";
 
@@ -11,7 +11,6 @@ export class Demo {
     const H = 640;
 
     this.scene = Common.initScene();
-    // this.scene.fog = new Fog(0x000000, 80, 160);
     Common.initLight(this.scene);
     this.camera = Common.initCamera(this.scene, W, H);
     this.renderer = Common.initRenderer(W, H, { antialias: false });
@@ -32,7 +31,19 @@ export class Demo {
       "./53393599_bldg_6677.obj",
       origin
     );
+    const dem = await PlateauModelUtil.loadObjModel(
+        "./53393599_dem_6677.obj",
+        origin
+    )
+
+    if( dem ){
+      const loader= new TextureLoader();
+      const texture = loader.load("./53393599_18.jpg");
+      dem.material = new MeshStandardMaterial({map:texture});
+      this.scene.add(dem);
+    }
     if (model) {
+      model.material = new MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.5})
       this.scene.add(model);
 
       const dummy = new Mesh(
