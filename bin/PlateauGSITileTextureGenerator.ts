@@ -1,4 +1,5 @@
 import SphericalMercator from "@mapbox/sphericalmercator";
+import { Rectangle } from "./Rectangle";
 import Sharp from "sharp";
 import { JapanStandardRegionalMeshUtil } from "../src/JapanStandardRegionalMeshUtil";
 
@@ -8,11 +9,8 @@ import { JapanStandardRegionalMeshUtil } from "../src/JapanStandardRegionalMeshU
  * @see : https://maps.gsi.go.jp/development/siyou.html
  */
 export class PlateauGSITileTextureGenerator {
-  public static async generate(
-    meshCode: string,
-    option?: PlateauGSITileOption
-  ) {
-    option = PlateauGSITileOption.init(option);
+  public static async generate(meshCode: string, option?: Option) {
+    const tileOption = new PlateauGSITileOption(option);
 
     const meshLatLng =
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
@@ -26,13 +24,27 @@ export class PlateauGSITileTextureGenerator {
     const sphericalMercator = new SphericalMercator();
     const xyz = sphericalMercator.xyz(
       [meshLatLng.lng, meshLatLng.lat, east, north],
-      option.zoomLevel ?? 14
+      tileOption.zoomLevel
+    );
+
+    const px = sphericalMercator.px(
+      [meshLatLng.lng, meshLatLng.lat],
+      tileOption.zoomLevel
+    );
+    const px2 = sphericalMercator.px([east, north], tileOption.zoomLevel);
+    const inner = new Rectangle(px[0], px2[1], px2[0], px[1]);
+
+    const outer = new Rectangle(
+      xyz.minX * tileOption.tileSize,
+      xyz.minY * tileOption.tileSize,
+      (xyz.maxX + 1) * tileOption.tileSize,
+      (xyz.maxY + 1) * tileOption.tileSize
     );
 
     const promises: Promise<any>[] = [];
     for (let y = xyz.minY; y <= xyz.maxY; y++) {
       for (let x = xyz.minX; x <= xyz.maxX; x++) {
-        const url = `https://cyberjapandata.gsi.go.jp/xyz/${option.style}/${option.zoomLevel}/${x}/${y}.jpg`;
+        const url = `https://cyberjapandata.gsi.go.jp/xyz/${tileOption.style}/${tileOption.zoomLevel}/${x}/${y}.jpg`;
         promises.push(this.getImage(url));
       }
     }
@@ -41,11 +53,11 @@ export class PlateauGSITileTextureGenerator {
     const image = await this.jointTile(
       blobs,
       xyz.maxX - xyz.minX + 1,
-      option.tileSize as number
+      tileOption.tileSize,
+      outer.extract(inner)
     );
-    const file = await image.toFile(
-      `./img/${meshCode}_${option.zoomLevel}.jpg`
-    );
+
+    await image.toFile(`./img/${meshCode}_${tileOption.zoomLevel}.jpg`);
   }
 
   private static async getImage(url: string): Promise<Buffer> {
@@ -58,12 +70,13 @@ export class PlateauGSITileTextureGenerator {
   private static async jointTile(
     buffers: Buffer[],
     langeX: number,
-    tileSize: number
+    tileSize: number,
+    extract: Sharp.Region
   ) {
     const image = Sharp({
       create: {
-        width: tileSize * langeX,
-        height: tileSize * Math.ceil(buffers.length / langeX),
+        width: extract.width,
+        height: extract.height,
         channels: 3,
         background: { b: 0, g: 0, r: 0 },
       },
@@ -75,8 +88,8 @@ export class PlateauGSITileTextureGenerator {
         const y = Math.floor(index / langeX);
         return {
           input: buffer,
-          left: x * tileSize,
-          top: y * tileSize,
+          left: x * tileSize - extract.left,
+          top: y * tileSize - extract.top,
         };
       }
     );
@@ -87,16 +100,20 @@ export class PlateauGSITileTextureGenerator {
   }
 }
 
-export class PlateauGSITileOption {
-  zoomLevel?: number = 14;
-  style?: string = "seamlessphoto";
-  tileSize?: number = 256;
+export class Option {
+  zoomLevel?: number;
+  style?: string;
+  tileSize?: number;
+}
 
-  public static init(option?: PlateauGSITileOption): PlateauGSITileOption {
-    option ??= {};
-    option.zoomLevel ??= 14;
-    option.style ??= "seamlessphoto";
-    option.tileSize ??= 256;
-    return option;
+export class PlateauGSITileOption {
+  zoomLevel: number;
+  style: string;
+  tileSize: number;
+
+  constructor(option?: Option) {
+    this.zoomLevel = option?.zoomLevel ?? 14;
+    this.style = option?.style ?? "seamlessphoto";
+    this.tileSize = option?.tileSize ?? 256;
   }
 }
