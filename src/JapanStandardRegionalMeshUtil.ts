@@ -20,6 +20,8 @@ export class JapanStandardRegionalMeshUtil {
    * @private
    */
   private static readonly primaryLatUnit: number = (1 / 60) * 40;
+  public static readonly MeshCodeLatitudeUnit = this.primaryLatUnit / 8 / 10;
+  public static readonly MeshCodeLongitudeUnit = 1 / 8 / 10;
 
   /**
    * 指定されたメッシュコードの、南西端（平面状では左下端）の緯度経度を返します。
