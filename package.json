@@ -40,6 +40,8 @@
   },
   "dependencies": {
     "@mapbox/sphericalmercator": "^1.2.0",
-    "@types/mapbox__sphericalmercator": "^1.2.0"
+    "@types/mapbox__sphericalmercator": "^1.2.0",
+    "@types/sharp": "^0.31.1",
+    "sharp": "^0.31.3"
   }
 }
