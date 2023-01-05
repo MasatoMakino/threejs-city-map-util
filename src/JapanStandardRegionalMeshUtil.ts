@@ -10,8 +10,8 @@ import { LatitudeLongitude } from "./LatitudeLongitude";
  *
  * PLATEAUプラットフォームはファイル命名形式に基準地域メッシュコードを利用しています。
  * @see https://www.mlit.go.jp/plateau/learning/tpc03-1/#p3_1
- *
- * TODO : プラトーモデルの設置テスト
+ * インタラクティブマップで目的地のメッシュコードが確認できます。
+ * @see https://jstatmap.e-stat.go.jp/jstatmap/main/trialstart.html
  */
 export class JapanStandardRegionalMeshUtil {
   /**
