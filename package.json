@@ -2,7 +2,13 @@
   "name": "@masatomakino/threejs-city-map-util",
   "version": "0.0.1",
   "description": "City-size map utility for three.js",
-  "main": "index.js",
+  "main": "./cjs/index.js",
+  "types": "./esm/index.d.ts",
+  "module": "./esm/index.js",
+  "files": [
+    "cjs",
+    "esm"
+  ],
   "scripts": {
     "test": "npx jest",
     "start:dev": "npm run server & npm run watch:tsc & npm run watch:demo",

@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "./cjs",
     "declaration": false,
-    "declarationMap": false
+    "declarationMap": false,
+    "sourceMap": false
   }
 }
