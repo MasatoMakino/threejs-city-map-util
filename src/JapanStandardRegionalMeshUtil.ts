@@ -10,8 +10,8 @@ import { LatitudeLongitude } from "./LatitudeLongitude";
  *
  * PLATEAUプラットフォームはファイル命名形式に基準地域メッシュコードを利用しています。
  * @see https://www.mlit.go.jp/plateau/learning/tpc03-1/#p3_1
- *
- * TODO : プラトーモデルの設置テスト
+ * インタラクティブマップで目的地のメッシュコードが確認できます。
+ * @see https://jstatmap.e-stat.go.jp/jstatmap/main/trialstart.html
  */
 export class JapanStandardRegionalMeshUtil {
   /**
@@ -20,6 +20,8 @@ export class JapanStandardRegionalMeshUtil {
    * @private
    */
   private static readonly primaryLatUnit: number = (1 / 60) * 40;
+  public static readonly MeshCodeLatitudeUnit = this.primaryLatUnit / 8 / 10;
+  public static readonly MeshCodeLongitudeUnit = 1 / 8 / 10;
 
   /**
    * 指定されたメッシュコードの、南西端（平面状では左下端）の緯度経度を返します。

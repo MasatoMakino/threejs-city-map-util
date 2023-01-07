@@ -10,7 +10,8 @@
     "watch:tsc": "tsc -W --incremental --project tsconfig.json",
     "demo": "npx @masatomakino/gulptask-demo-page --copyTargets 'png','jpg','jpeg','obj'",
     "watch:demo": "npm run demo -- -W",
-    "server": "npx browser-sync ./docs/demo -w"
+    "server": "npx browser-sync ./docs/demo -w",
+    "run_task": "npx ts-node task/testTile.ts"
   },
   "repository": {
     "type": "git",
@@ -36,5 +37,11 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "utm": "^1.1.1"
+  },
+  "dependencies": {
+    "@mapbox/sphericalmercator": "^1.2.0",
+    "@types/mapbox__sphericalmercator": "^1.2.0",
+    "@types/sharp": "^0.31.1",
+    "sharp": "^0.31.3"
   }
 }

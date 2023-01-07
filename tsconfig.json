@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs" /* Specify what module code is generated. */,
+    "target": "ES2021",
+    "module": "ES2022" /* Specify what module code is generated. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+    "lib": ["ES2021", "DOM"],
 
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
-    "outDir": "./lib" /* Redirect output structure to the directory. */,
+    "outDir": "./esm" /* Redirect output structure to the directory. */,
+    "declaration": true,
 
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-
     "strict": true /* Enable all strict type-checking options. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"],
 }
