@@ -1,5 +1,4 @@
 import Sharp from "sharp";
-
 export class Rectangle {
   constructor(
     public x1: number,
@@ -8,7 +7,7 @@ export class Rectangle {
     public y2: number
   ) {}
 
-  extract(inner: Rectangle) :Sharp.Region{
+  extract(inner: Rectangle): Sharp.Region {
     return {
       ...inner.size(),
       left: inner.x1 - this.x1,

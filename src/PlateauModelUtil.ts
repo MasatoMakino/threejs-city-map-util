@@ -4,7 +4,7 @@ import {
   PositionUtil,
 } from "./";
 import { Mesh, Vector3 } from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 export class PlateauModelUtil {
   /**
