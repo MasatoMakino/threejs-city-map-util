@@ -105,7 +105,7 @@ dist
 .idea
 
 /docs
-/lib
 /esm
+/cjs
 /task
 /img/
