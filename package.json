@@ -5,6 +5,7 @@
   "main": "./cjs/index.js",
   "types": "./esm/index.d.ts",
   "module": "./esm/index.js",
+  "bin": "./cjs/CLI.js",
   "files": [
     "cjs",
     "esm"
@@ -17,7 +18,7 @@
     "demo": "npx @masatomakino/gulptask-demo-page --copyTargets 'png','jpg','jpeg','obj'",
     "watch:demo": "npm run demo -- -W",
     "server": "npx browser-sync ./docs/demo -w",
-    "run_task": "npx ts-node task/testTile.ts"
+    "run_task": "node ./cjs/CLI.js generateTexture '53393599'"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "@mapbox/sphericalmercator": "^1.2.0",
     "@types/mapbox__sphericalmercator": "^1.2.0",
     "@types/sharp": "^0.31.1",
+    "commander": "^9.5.0",
     "sharp": "^0.31.3"
   }
 }

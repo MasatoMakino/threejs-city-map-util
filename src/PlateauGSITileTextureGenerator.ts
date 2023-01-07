@@ -1,7 +1,7 @@
 import SphericalMercator from "@mapbox/sphericalmercator";
 import { Rectangle } from "./Rectangle";
 import Sharp from "sharp";
-import { JapanStandardRegionalMeshUtil } from "../src/JapanStandardRegionalMeshUtil";
+import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil";
 
 /**
  *
@@ -112,7 +112,7 @@ export class PlateauGSITileOption {
   tileSize: number;
 
   constructor(option?: Option) {
-    this.zoomLevel = option?.zoomLevel ?? 14;
+    this.zoomLevel = option?.zoomLevel ?? 16;
     this.style = option?.style ?? "seamlessphoto";
     this.tileSize = option?.tileSize ?? 256;
   }
