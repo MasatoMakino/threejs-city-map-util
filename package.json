@@ -11,7 +11,7 @@
     "esm"
   ],
   "scripts": {
-    "test": "npx jest",
+    "test": "npx jest --silent",
     "start:dev": "npm run server & npm run watch:tsc & npm run watch:demo",
     "buildTS": "tsc & tsc --project tsconfig.cjs.json",
     "watch:tsc": "tsc -W --incremental & tsc -W --incremental --project tsconfig.cjs.json",
