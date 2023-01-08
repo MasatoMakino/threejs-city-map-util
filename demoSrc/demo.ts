@@ -1,6 +1,6 @@
 import {Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, TextureLoader} from "three";
 import { Common } from "./Common";
-import { LatitudeLongitude, PlateauModelUtil, PositionUtil } from "../src";
+import { LatitudeLongitude, PlateauModelUtil, PositionUtil } from "../";
 
 export class Demo {
   private renderer;
