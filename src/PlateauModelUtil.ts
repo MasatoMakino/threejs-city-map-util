@@ -31,7 +31,6 @@ export class PlateauModelUtil {
     const str = await txt.text();
 
     const meshCode = PlateauModelUtil.getMeshCode(url);
-    if (meshCode == null) return undefined;
     const meshCodeLatLng =
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
     if (meshCodeLatLng == null) return undefined;
@@ -62,25 +61,26 @@ export class PlateauModelUtil {
 
   private static getZone = (objString: string) => {
     const getLatitudeOfOrigin = (str: string): number | undefined => {
-      const match = str.match(/PARAMETER\["latitude_of_origin",([\d\.]+)\]/);
-      if (match) {
-        return Number(match[1]);
-      }
-      return undefined;
+      return this.getOrigin(str, /PARAMETER\["latitude_of_origin",([\d\.]+)\]/);
     };
-    const latitudeOfOrigin = getLatitudeOfOrigin(objString);
 
     const getLongitudeOfOrigin = (str: string): number | undefined => {
-      const match = str.match(/PARAMETER\["central_meridian",([\d\.]+)\]/);
-      if (match) {
-        return Number(match[1]);
-      }
-      return undefined;
+      return this.getOrigin(str, /PARAMETER\["central_meridian",([\d\.]+)\]/);
     };
-    const longitudeOfOrigin = getLongitudeOfOrigin(objString);
 
-    return new LatitudeLongitude(latitudeOfOrigin, longitudeOfOrigin);
+    return new LatitudeLongitude(
+      getLatitudeOfOrigin(objString),
+      getLongitudeOfOrigin(objString)
+    );
   };
+
+  private static getOrigin(str: string, pattern: RegExp): number | undefined {
+    const match = str.match(pattern);
+    if (match) {
+      return Number(match[1]);
+    }
+    return undefined;
+  }
 
   private static getShiftMeters = (
     meshCodeLatLng: LatitudeLongitude,
