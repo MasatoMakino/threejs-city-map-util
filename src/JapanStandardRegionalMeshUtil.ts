@@ -34,44 +34,12 @@ export class JapanStandardRegionalMeshUtil {
 
     const latLng = new LatitudeLongitude();
 
-    this.addLatLng(
-      latLng,
-      mesh.slice(0, 2),
-      mesh.slice(2, 4),
-      this.primaryLatUnit,
-      1,
-      100
-    );
+    this.addLatLng(latLng, mesh, 0, 4, 1, 100);
+    this.addLatLng(latLng, mesh, 4, 6, 1 / 8);
+    this.addLatLng(latLng, mesh, 6, 8, 1 / 8 / 10);
 
-    this.addLatLng(
-      latLng,
-      mesh.slice(4, 5),
-      mesh.slice(5, 6),
-      this.primaryLatUnit / 8,
-      1 / 8
-    );
-
-    this.addLatLng(
-      latLng,
-      mesh.slice(6, 7),
-      mesh.slice(7, 8),
-      this.MeshCodeLatitudeUnit,
-      this.MeshCodeLongitudeUnit
-    );
-
-    this.addQuadrantMeshLatLng(
-      latLng,
-      this.MeshCodeLatitudeUnit / 2,
-      this.MeshCodeLongitudeUnit / 2,
-      mesh.slice(8, 9)
-    );
-
-    this.addQuadrantMeshLatLng(
-      latLng,
-      this.MeshCodeLatitudeUnit / 2 / 2,
-      this.MeshCodeLongitudeUnit / 2 / 2,
-      mesh.slice(9, 10)
-    );
+    this.addQuadrantMeshLatLng(latLng, 1 / 2, mesh.slice(8, 9));
+    this.addQuadrantMeshLatLng(latLng, 1 / 2 / 2, mesh.slice(9, 10));
 
     return latLng;
   }
@@ -105,28 +73,31 @@ export class JapanStandardRegionalMeshUtil {
 
   private static addLatLng(
     latLng: LatitudeLongitude,
-    latCode: string,
-    lngCode: string,
-    latUnit: number,
-    lngUnit: number,
+    code: string,
+    startIndex: number,
+    endIndex: number,
+    latLngScale: number,
     shiftLng: number = 0
   ): void {
+    const centerIndex = startIndex + (endIndex - startIndex) / 2;
+    const latCode = code.slice(startIndex, centerIndex);
+    const lngCode = code.slice(centerIndex, endIndex);
     if (latCode === "" || lngCode === "") return;
-    latLng.lat += Number(latCode) * latUnit;
-    latLng.lng += Number(lngCode) * lngUnit + shiftLng;
+    latLng.lat += Number(latCode) * this.primaryLatUnit * latLngScale;
+    latLng.lng += Number(lngCode) * latLngScale + shiftLng;
   }
   private static addQuadrantMeshLatLng(
     latLng: LatitudeLongitude,
-    unitLat: number,
-    unitLng: number,
+    latLngScale: number,
     code: string
   ): void {
     if (code === "") return;
     const meshNumber = Number(code);
     if (meshNumber > 4) return;
 
-    latLng.lat += meshNumber > 2 ? unitLat : 0;
-    latLng.lng += meshNumber % 2 === 0 ? unitLng : 0;
+    latLng.lat += meshNumber > 2 ? this.MeshCodeLatitudeUnit * latLngScale : 0;
+    latLng.lng +=
+      meshNumber % 2 === 0 ? this.MeshCodeLongitudeUnit * latLngScale : 0;
   }
 
   public static fromLongitudeLatitude(
