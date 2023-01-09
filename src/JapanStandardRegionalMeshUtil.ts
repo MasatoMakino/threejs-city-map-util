@@ -28,25 +28,8 @@ export class JapanStandardRegionalMeshUtil {
    * @param mesh
    */
   static toLatitudeLongitude(mesh: string): LatitudeLongitude | undefined {
-    if (Number.isNaN(Number(mesh))) {
-      console.warn(
-        "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。"
-      );
+    if (!this.validateMeshCode(mesh)) {
       return undefined;
-    }
-
-    switch (mesh.length) {
-      case 4:
-      case 6:
-      case 8:
-      case 9:
-      case 10:
-        break;
-      default:
-        console.warn(
-          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、undefinedを返します。`
-        );
-        return undefined;
     }
 
     const toPrimaryLatLng = (mesh: string): LatitudeLongitude => {
@@ -89,24 +72,11 @@ export class JapanStandardRegionalMeshUtil {
     };
     addTertiaryLatLng(latLng, mesh);
 
-    const addQuadrantMeshLatLng = (
-      latLng: LatitudeLongitude,
-      unitLat: number,
-      unitLng: number,
-      code: string
-    ) => {
-      if (code === "") return;
-      const meshNumber = Number(code);
-      if (meshNumber > 4) return;
-
-      latLng.lat += meshNumber > 2 ? unitLat : 0;
-      latLng.lng += meshNumber % 2 === 0 ? unitLng : 0;
-    };
     const addHalfKmMeshLatLng = (
       latLng: LatitudeLongitude,
       mesh: string
     ): void => {
-      addQuadrantMeshLatLng(
+      this.addQuadrantMeshLatLng(
         latLng,
         this.primaryLatUnit / 8 / 10 / 2,
         1 / 8 / 10 / 2,
@@ -119,7 +89,7 @@ export class JapanStandardRegionalMeshUtil {
       latLng: LatitudeLongitude,
       mesh: string
     ): void => {
-      addQuadrantMeshLatLng(
+      this.addQuadrantMeshLatLng(
         latLng,
         this.primaryLatUnit / 8 / 10 / 2 / 2,
         1 / 8 / 10 / 2 / 2,
@@ -129,6 +99,44 @@ export class JapanStandardRegionalMeshUtil {
     addQuadKmMeshLatLng(latLng, mesh);
 
     return latLng;
+  }
+
+  private static validateMeshCode(mesh: string): boolean {
+    if (Number.isNaN(Number(mesh))) {
+      console.warn(
+        "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。"
+      );
+      return false;
+    }
+
+    switch (mesh.length) {
+      case 4:
+      case 6:
+      case 8:
+      case 9:
+      case 10:
+        break;
+      default:
+        console.warn(
+          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、undefinedを返します。`
+        );
+        return false;
+    }
+    return true;
+  }
+
+  private static addQuadrantMeshLatLng(
+    latLng: LatitudeLongitude,
+    unitLat: number,
+    unitLng: number,
+    code: string
+  ): void {
+    if (code === "") return;
+    const meshNumber = Number(code);
+    if (meshNumber > 4) return;
+
+    latLng.lat += meshNumber > 2 ? unitLat : 0;
+    latLng.lng += meshNumber % 2 === 0 ? unitLng : 0;
   }
 
   public static fromLongitudeLatitude(
