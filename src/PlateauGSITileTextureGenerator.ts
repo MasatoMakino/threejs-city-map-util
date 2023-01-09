@@ -2,15 +2,21 @@ import SphericalMercator from "@mapbox/sphericalmercator";
 import { Rectangle } from "./Rectangle";
 import Sharp from "sharp";
 import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil";
+import { join } from "path";
+import { mkdir } from "fs/promises";
 
 /**
+ * PlateauモデルのメッシュIDから、そのモデルにスナップするテクスチャを国土地理院タイルを利用して生成する
  *
  * @see : https://maps.gsi.go.jp/development/ichiran.html
  * @see : https://maps.gsi.go.jp/development/siyou.html
  */
 export class PlateauGSITileTextureGenerator {
-  public static async generate(meshCode: string, option?: Option) {
-    const tileOption = new PlateauGSITileOption(option);
+  public static async generate(
+    meshCode: string,
+    option?: PlateauGSITileOption
+  ) {
+    const tileOption = PlateauGSITileOption.init(option);
 
     const meshLatLng =
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
@@ -57,7 +63,12 @@ export class PlateauGSITileTextureGenerator {
       outer.extract(inner)
     );
 
-    await image.toFile(`./img/${meshCode}_${tileOption.zoomLevel}.jpg`);
+    if (!Array.isArray(tileOption.imgDir)) {
+      tileOption.imgDir = [tileOption.imgDir];
+    }
+    const dir = join(process.cwd(), ...tileOption.imgDir);
+    await mkdir(dir, { recursive: true });
+    await image.toFile(`${dir}/${meshCode}_${tileOption.zoomLevel}.jpg`);
   }
 
   private static async getImage(url: string): Promise<Buffer> {
@@ -100,20 +111,42 @@ export class PlateauGSITileTextureGenerator {
   }
 }
 
-export class Option {
-  zoomLevel?: number;
-  style?: string;
-  tileSize?: number;
-}
-
 export class PlateauGSITileOption {
-  zoomLevel: number;
-  style: string;
-  tileSize: number;
+  /**
+   * タイルの詳細度
+   * @see https://maps.gsi.go.jp/development/siyou.html#siyou-zm
+   */
+  zoomLevel?: number;
+  /**
+   * タイルの種類
+   *
+   * API URL https://cyberjapandata.gsi.go.jp/xyz/{style}/{z}/{x}/{y}.{ext}
+   * のスタイル部分に相当する。
+   *
+   * @see https://maps.gsi.go.jp/development/ichiran.html
+   * @default seamlessphoto
+   */
+  style?: string;
+  /**
+   * 1タイルの画素数。
+   * 国土地理院タイルでは原則256ピクセル。
+   * @default 256
+   */
+  tileSize?: number;
+  /**
+   * 生成した画像ファイルを保存するディレクトリ
+   * @default gsiTexture
+   */
+  imgDir?: string | string[];
 
-  constructor(option?: Option) {
-    this.zoomLevel = option?.zoomLevel ?? 16;
-    this.style = option?.style ?? "seamlessphoto";
-    this.tileSize = option?.tileSize ?? 256;
+  public static init(
+    option?: PlateauGSITileOption
+  ): Required<PlateauGSITileOption> {
+    option ??= {};
+    option.zoomLevel = option?.zoomLevel ?? 16;
+    option.style = option?.style ?? "seamlessphoto";
+    option.tileSize = option?.tileSize ?? 256;
+    option.imgDir = option?.imgDir ?? ["gsiTexture"];
+    return option as Required<PlateauGSITileOption>;
   }
 }
