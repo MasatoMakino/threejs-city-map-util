@@ -27,8 +27,8 @@ export class JapanStandardRegionalMeshUtil {
    * 指定されたメッシュコードの、南西端（平面状では左下端）の緯度経度を返します。
    * @param mesh
    */
-  static toLatitudeLongitude(mesh: string): LatitudeLongitude | undefined {
-    if (!this.validateMeshCode(mesh)) {
+  static toLatitudeLongitude(mesh?: string): LatitudeLongitude | undefined {
+    if (mesh == null || !this.validateMeshCode(mesh)) {
       return undefined;
     }
 
@@ -76,7 +76,10 @@ export class JapanStandardRegionalMeshUtil {
     return latLng;
   }
 
-  private static validateMeshCode(mesh: string): boolean {
+  private static validateMeshCode(mesh?: string): boolean {
+    if (mesh == null) {
+      return false;
+    }
     if (Number.isNaN(Number(mesh))) {
       console.warn(
         "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。"
