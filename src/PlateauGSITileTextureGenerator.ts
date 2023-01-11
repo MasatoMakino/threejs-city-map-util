@@ -1,9 +1,14 @@
 import SphericalMercator from "@mapbox/sphericalmercator";
-import { Rectangle } from "./Rectangle";
-import Sharp from "sharp";
-import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil";
-import { join } from "path";
 import { mkdir } from "fs/promises";
+import { join } from "path";
+import Sharp from "sharp";
+import {
+  BoundingBox,
+  SphericalMercatorUtil,
+  XYBounds,
+} from "./SphericalMercatorUtil";
+import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil";
+import { Rectangle } from "./Rectangle";
 
 /**
  * PlateauモデルのメッシュIDから、そのモデルにスナップするテクスチャを国土地理院タイルを利用して生成する
@@ -18,64 +23,90 @@ export class PlateauGSITileTextureGenerator {
   ) {
     const tileOption = PlateauGSITileOption.init(option);
 
-    const meshLatLng =
-      JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
+    const bbox = this.getBBox(meshCode);
+    if (bbox == null) {
+      return undefined;
+    }
+
+    const sphericalMercator = new SphericalMercator({
+      size: tileOption.tileSize,
+    });
+    const xyz = sphericalMercator.xyz(bbox, tileOption.zoomLevel);
+
+    const buffers = await this.downloadTiles(
+      xyz,
+      tileOption.style,
+      tileOption.zoomLevel
+    );
+    const image = await this.jointTile(
+      buffers,
+      xyz.maxX - xyz.minX + 1,
+      tileOption.tileSize,
+      this.getExtractRegion(sphericalMercator, xyz, bbox, tileOption)
+    );
+
+    await this.saveToFile(
+      meshCode,
+      image,
+      tileOption.imgDir,
+      tileOption.zoomLevel
+    );
+  }
+
+  private static getBBox(code: string): BoundingBox | undefined {
+    const meshLatLng = JapanStandardRegionalMeshUtil.toLatitudeLongitude(code);
     if (meshLatLng == null) return;
 
     const north =
       meshLatLng.lat + JapanStandardRegionalMeshUtil.MeshCodeLatitudeUnit;
     const east =
       meshLatLng.lng + JapanStandardRegionalMeshUtil.MeshCodeLongitudeUnit;
+    return [meshLatLng.lng, meshLatLng.lat, east, north];
+  }
 
-    const sphericalMercator = new SphericalMercator();
-    const xyz = sphericalMercator.xyz(
-      [meshLatLng.lng, meshLatLng.lat, east, north],
-      tileOption.zoomLevel
-    );
-
+  private static getExtractRegion(
+    sphericalMercator: SphericalMercator,
+    xyz: XYBounds,
+    bbox: BoundingBox,
+    tileOption: Required<PlateauGSITileOption>
+  ): Sharp.Region {
     const px = sphericalMercator.px(
-      [meshLatLng.lng, meshLatLng.lat],
+      SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "SouthWest"),
       tileOption.zoomLevel
     );
-    const px2 = sphericalMercator.px([east, north], tileOption.zoomLevel);
+    const px2 = sphericalMercator.px(
+      SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "NorthEast"),
+      tileOption.zoomLevel
+    );
     const inner = new Rectangle(px[0], px2[1], px2[0], px[1]);
-
     const outer = new Rectangle(
       xyz.minX * tileOption.tileSize,
       xyz.minY * tileOption.tileSize,
       (xyz.maxX + 1) * tileOption.tileSize,
       (xyz.maxY + 1) * tileOption.tileSize
     );
-
-    const promises: Promise<any>[] = [];
-    for (let y = xyz.minY; y <= xyz.maxY; y++) {
-      for (let x = xyz.minX; x <= xyz.maxX; x++) {
-        const url = `https://cyberjapandata.gsi.go.jp/xyz/${tileOption.style}/${tileOption.zoomLevel}/${x}/${y}.jpg`;
-        promises.push(this.getImage(url));
-      }
-    }
-
-    const blobs = await Promise.all(promises);
-    const image = await this.jointTile(
-      blobs,
-      xyz.maxX - xyz.minX + 1,
-      tileOption.tileSize,
-      outer.extract(inner)
-    );
-
-    if (!Array.isArray(tileOption.imgDir)) {
-      tileOption.imgDir = [tileOption.imgDir];
-    }
-    const dir = join(process.cwd(), ...tileOption.imgDir);
-    await mkdir(dir, { recursive: true });
-    await image.toFile(`${dir}/${meshCode}_${tileOption.zoomLevel}.jpg`);
+    return outer.extract(inner);
   }
-
   private static async getImage(url: string): Promise<Buffer> {
     const response = await fetch(url);
     const blob = await response.blob();
     const arrayBuffer = await blob.arrayBuffer();
     return Buffer.from(arrayBuffer);
+  }
+
+  private static async downloadTiles(
+    xyz: XYBounds,
+    style: string,
+    zoomLevel: number
+  ) {
+    const promises: Promise<any>[] = [];
+    for (let y = xyz.minY; y <= xyz.maxY; y++) {
+      for (let x = xyz.minX; x <= xyz.maxX; x++) {
+        const url = `https://cyberjapandata.gsi.go.jp/xyz/${style}/${zoomLevel}/${x}/${y}.jpg`;
+        promises.push(this.getImage(url));
+      }
+    }
+    return await Promise.all<Buffer>(promises);
   }
 
   private static async jointTile(
@@ -108,6 +139,20 @@ export class PlateauGSITileTextureGenerator {
     image.composite(compositeBlobs);
     image.jpeg();
     return image;
+  }
+
+  private static async saveToFile(
+    meshCode: string,
+    image: Sharp.Sharp,
+    imgDir: string | string[],
+    zoomLevel: number
+  ) {
+    if (!Array.isArray(imgDir)) {
+      imgDir = [imgDir];
+    }
+    const dir = join(process.cwd(), ...imgDir);
+    await mkdir(dir, { recursive: true });
+    await image.toFile(`${dir}/${meshCode}_${zoomLevel}.jpg`);
   }
 }
 
