@@ -23,3 +23,4 @@ export class LatitudeLongitude {
     return new LatitudeLongitude(this.lat, this.lng);
   }
 }
+
