@@ -67,12 +67,10 @@ describe("JapanStandardRegionalMeshUtil", () => {
     ).toEqual(undefined);
   });
 
-  test("toLatLng", () => {
-    expect(
-      JapanStandardRegionalMeshUtil.fromLongitudeLatitude(testLatLng).slice(
-        0,
-        8
-      )
-    ).toBe(testMeshCode);
+  test("fromLongitudeLatitude", () => {
+    const code =
+      JapanStandardRegionalMeshUtil.fromLongitudeLatitude(testLatLng);
+    expect(code).toBe("5339359921");
+    expect(code.slice(0, 8)).toBe(testMeshCode);
   });
 });
