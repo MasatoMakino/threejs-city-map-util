@@ -1,4 +1,4 @@
 export * from "./JapanStandardRegionalMeshUtil";
 export * from "./LatitudeLongitude";
-export * from "./PlateauModelUtil";
+export * from "./PlateauModelLoader";
 export * from "./PositionUtil";
