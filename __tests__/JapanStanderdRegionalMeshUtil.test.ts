@@ -1,12 +1,7 @@
 import { LatitudeLongitude, JapanStandardRegionalMeshUtil } from "../src";
+import { TestMeshCode, TestLatLng } from "./Positions";
 
 describe("JapanStandardRegionalMeshUtil", () => {
-  const testLatLng = new LatitudeLongitude(
-    35.65864183184921,
-    139.74544075634395
-  ); //東京タワー
-  const testMeshCode = "53393599"; //東京タワーを含むメッシュコード
-
   const testToLatLng = (
     code: string,
     codeLength: number,
@@ -20,17 +15,17 @@ describe("JapanStandardRegionalMeshUtil", () => {
   };
 
   test("Primary mesh code to lat-lng", () => {
-    testToLatLng(testMeshCode, 4, 35.33333333333333, 139);
+    testToLatLng(TestMeshCode, 4, 35.33333333333333, 139);
   });
   test("Secondary mesh code to lat-lng", () => {
-    testToLatLng(testMeshCode, 6, 35.58333333333333, 139.625);
+    testToLatLng(TestMeshCode, 6, 35.58333333333333, 139.625);
   });
   test("Standard mesh code to lat-lng", () => {
-    testToLatLng(testMeshCode, 8, 35.65833333333333, 139.7375);
+    testToLatLng(TestMeshCode, 8, 35.65833333333333, 139.7375);
   });
   test("Quad mesh 44 to lat-lng", () => {
     testToLatLng(
-      testMeshCode + "44",
+      TestMeshCode + "44",
       10,
       35.66458333333333,
       139.74687500000002
@@ -39,10 +34,10 @@ describe("JapanStandardRegionalMeshUtil", () => {
 
   const testSubMesh = (subMeshCode: string) => {
     expect(
-      JapanStandardRegionalMeshUtil.toLatitudeLongitude(testMeshCode)
+      JapanStandardRegionalMeshUtil.toLatitudeLongitude(TestMeshCode)
     ).toEqual(
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(
-        testMeshCode + subMeshCode
+        TestMeshCode + subMeshCode
       )
     );
   };
@@ -69,8 +64,8 @@ describe("JapanStandardRegionalMeshUtil", () => {
 
   test("fromLongitudeLatitude", () => {
     const code =
-      JapanStandardRegionalMeshUtil.fromLongitudeLatitude(testLatLng);
+      JapanStandardRegionalMeshUtil.fromLongitudeLatitude(TestLatLng);
     expect(code).toBe("5339359921");
-    expect(code.slice(0, 8)).toBe(testMeshCode);
+    expect(code.slice(0, 8)).toBe(TestMeshCode);
   });
 });

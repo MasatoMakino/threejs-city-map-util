@@ -6,20 +6,7 @@ import {
 import { Mesh, Vector3 } from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
-export class PlateauModelUtil {
-  /**
-   * PLATEAUモデル名から基準地域メッシュコードを取り出す。
-   * @param modelName
-   */
-  static getMeshCode(modelName: string): string | undefined {
-    const regex = /(\d+)_[\w]+_\d+\.[a-z]+$/;
-    const match = modelName.match(regex);
-    if (match == null) {
-      return undefined;
-    }
-    return match[1];
-  }
-
+export class PlateauModelLoader {
   /**
    * PLATEAUモデルをロードし、コンテナ内に配置できるよう回転する。
    */
@@ -35,8 +22,8 @@ export class PlateauModelUtil {
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
     if (meshCodeLatLng == null) return undefined;
 
-    const zone = this.getZone(str);
-    const shift = this.getShiftMeters(meshCodeLatLng, zone);
+    const zone = PlateauModelUtil.getZone(str);
+    const shift = PlateauModelUtil.getShiftMeters(meshCodeLatLng, zone);
     if (shift == null) return undefined;
 
     const group = new OBJLoader().parse(str);
@@ -58,8 +45,23 @@ export class PlateauModelUtil {
 
     return mesh;
   }
+}
 
-  private static getZone = (objString: string) => {
+export class PlateauModelUtil {
+  /**
+   * PLATEAUモデル名から基準地域メッシュコードを取り出す。
+   * @param modelName
+   */
+  static getMeshCode(modelName: string): string | undefined {
+    const regex = /(\d+)_[\w]+_\d+\.[a-z]+$/;
+    const match = modelName.match(regex);
+    if (match == null) {
+      return undefined;
+    }
+    return match[1];
+  }
+
+  public static getZone = (objString: string) => {
     const getLatitudeOfOrigin = (str: string): number | undefined => {
       return this.getOrigin(str, /PARAMETER\["latitude_of_origin",([\d\.]+)\]/);
     };
@@ -82,7 +84,7 @@ export class PlateauModelUtil {
     return undefined;
   }
 
-  private static getShiftMeters = (
+  public static getShiftMeters = (
     meshCodeLatLng: LatitudeLongitude,
     zone: LatitudeLongitude
   ): Vector3 | undefined => {

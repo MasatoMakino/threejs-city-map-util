@@ -1,6 +1,6 @@
 import {Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, TextureLoader} from "three";
 import { Common } from "./Common";
-import { LatitudeLongitude, PlateauModelUtil, PositionUtil } from "../";
+import { LatitudeLongitude, PlateauModelLoader, PositionUtil } from "../";
 
 export class Demo {
   private renderer;
@@ -27,11 +27,11 @@ export class Demo {
       35.65833333333333 + 2 / 3 / 8 / 10 / 2,
       139.7375 + 1 / 160
     );
-    const model = await PlateauModelUtil.loadObjModel(
+    const model = await PlateauModelLoader.loadObjModel(
       "./53393599_bldg_6677.obj",
       origin
     );
-    const dem = await PlateauModelUtil.loadObjModel(
+    const dem = await PlateauModelLoader.loadObjModel(
         "./53393599_dem_6677.obj",
         origin
     )
