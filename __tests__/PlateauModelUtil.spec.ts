@@ -13,7 +13,7 @@ describe("PlateauModelUtil", () => {
     expect(code).toBe("53393599");
   });
 
-  test("load model file", async () => {
+  test("get origin from file name", async () => {
     const filePath = "../demoSrc/53393599_bldg_6677.obj";
     const meshCode = PlateauModelUtil.getMeshCode(filePath);
     const origin = JapanStandardRegionalMeshUtil.toLatitudeLongitude(
@@ -22,7 +22,5 @@ describe("PlateauModelUtil", () => {
     expect(origin).toStrictEqual(
       new LatitudeLongitude(35.65833333333333, 139.7375)
     );
-    // const model = await PlateauModelUtil.loadObjModel(filePath, origin);
-    // expect(model).toBe("");
   });
 });
