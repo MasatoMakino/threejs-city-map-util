@@ -20,12 +20,11 @@ export class PlateauModelLoader {
     const meshCode = PlateauModelUtil.getMeshCode(url);
     const meshCodeLatLng =
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
-    if (meshCodeLatLng == null) return undefined;
-
     const zone = PlateauModelUtil.getZone(str);
     const shift = PlateauModelUtil.getShiftMeters(meshCodeLatLng, zone);
-    if (shift == null) return undefined;
-
+    if (meshCodeLatLng == null || shift == null) {
+      return undefined;
+    }
     const group = new OBJLoader().parse(str);
     const mesh = group.children[0] as Mesh;
     if (mesh == null) return undefined;
@@ -61,19 +60,21 @@ export class PlateauModelUtil {
     return match[1];
   }
 
-  public static getZone = (objString: string) => {
-    const getLatitudeOfOrigin = (str: string): number | undefined => {
-      return this.getOrigin(str, /PARAMETER\["latitude_of_origin",([\d\.]+)\]/);
-    };
-
-    const getLongitudeOfOrigin = (str: string): number | undefined => {
-      return this.getOrigin(str, /PARAMETER\["central_meridian",([\d\.]+)\]/);
-    };
-
-    return new LatitudeLongitude(
-      getLatitudeOfOrigin(objString),
-      getLongitudeOfOrigin(objString)
+  public static getZone = (
+    objString: string
+  ): LatitudeLongitude | undefined => {
+    const lat = this.getOrigin(
+      objString,
+      /PARAMETER\["latitude_of_origin",([\d\.]+)\]/
     );
+    const lng = this.getOrigin(
+      objString,
+      /PARAMETER\["central_meridian",([\d\.]+)\]/
+    );
+    if (lat && lng) {
+      return new LatitudeLongitude(lat, lng);
+    }
+    return undefined;
   };
 
   private static getOrigin(str: string, pattern: RegExp): number | undefined {
@@ -85,9 +86,10 @@ export class PlateauModelUtil {
   }
 
   public static getShiftMeters = (
-    meshCodeLatLng: LatitudeLongitude,
-    zone: LatitudeLongitude
+    meshCodeLatLng?: LatitudeLongitude,
+    zone?: LatitudeLongitude
   ): Vector3 | undefined => {
+    if (meshCodeLatLng == null || zone == null) return undefined;
     return PositionUtil.toTransverseMercatorXZ(meshCodeLatLng, zone);
   };
 }

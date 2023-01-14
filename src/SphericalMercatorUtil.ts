@@ -12,6 +12,9 @@ export class SphericalMercatorUtil {
   }
 }
 
+/**
+ * TODO : PR export interface
+ */
 export interface XYBounds {
   minX: number;
   minY: number;
