@@ -11,7 +11,7 @@ on:
 
 jobs:
   jest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -19,10 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: install apt packages for headless-gl
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install xvfb
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
