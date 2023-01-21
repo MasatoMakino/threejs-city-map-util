@@ -32,6 +32,10 @@ export class PlateauGSITileTextureGenerator {
       size: tileOption.tileSize,
     });
     const xyz = sphericalMercator.xyz(bbox, tileOption.zoomLevel);
+    const region = this.getRegion(sphericalMercator, xyz, bbox, tileOption);
+    if (region == null) {
+      return undefined;
+    }
 
     const buffers = await this.downloadTiles(
       xyz,
@@ -42,7 +46,7 @@ export class PlateauGSITileTextureGenerator {
       buffers,
       xyz.maxX - xyz.minX + 1,
       tileOption.tileSize,
-      this.getExtractRegion(sphericalMercator, xyz, bbox, tileOption)
+      region
     );
 
     await this.saveToFile(
@@ -64,12 +68,12 @@ export class PlateauGSITileTextureGenerator {
     return [meshLatLng.lng, meshLatLng.lat, east, north];
   }
 
-  private static getExtractRegion(
+  private static getRegion(
     sphericalMercator: SphericalMercator,
     xyz: XYBounds,
     bbox: BoundingBox,
     tileOption: Required<PlateauGSITileOption>
-  ): Sharp.Region {
+  ): Sharp.Region | undefined {
     const px = sphericalMercator.px(
       SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "SouthWest"),
       tileOption.zoomLevel
@@ -85,7 +89,19 @@ export class PlateauGSITileTextureGenerator {
       (xyz.maxX + 1) * tileOption.tileSize,
       (xyz.maxY + 1) * tileOption.tileSize
     );
-    return outer.extract(inner);
+
+    const region = outer.extract(inner);
+    if (
+      region.width < tileOption.tileSize ||
+      region.height < tileOption.tileSize
+    ) {
+      console.warn(
+        `three-city-map-util : ${region.width} * ${region.height} Output image size is smaller than tile size ${tileOption.tileSize}. Increase zoomLevel. `
+      );
+      return undefined;
+    }
+
+    return region;
   }
   private static async getImage(url: string): Promise<Buffer> {
     const response = await fetch(url);
@@ -115,6 +131,8 @@ export class PlateauGSITileTextureGenerator {
     tileSize: number,
     extract: Sharp.Region
   ) {
+    console.log(extract);
+
     const image = Sharp({
       create: {
         width: extract.width,
