@@ -130,8 +130,6 @@ export class PlateauGSITileTextureGenerator {
     tileSize: number,
     extract: Sharp.Region
   ) {
-    console.log(extract);
-
     const image = Sharp({
       create: {
         width: extract.width,
