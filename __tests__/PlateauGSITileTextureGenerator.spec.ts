@@ -6,7 +6,8 @@ describe("PlateauGSITileTextureGenerator", () => {
     global.fetch = jest.fn().mockImplementation(fetchImageMock);
   });
 
-  test("generate", () => {
-    const result = PlateauGSITileTextureGenerator.generate("53393599");
+  test("generate", async () => {
+    const result = await PlateauGSITileTextureGenerator.generate("53393599");
+    expect(result).toMatchObject({ format: "jpeg", height: 478, width: 582 });
   });
 });
