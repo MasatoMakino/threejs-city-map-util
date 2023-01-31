@@ -1,4 +1,3 @@
-import "cross-fetch/polyfill";
 import { Vector3 } from "three";
 import { JapanStandardRegionalMeshUtil, LatitudeLongitude } from "../src";
 import { PlateauModelUtil } from "../src/PlateauModelLoader";
