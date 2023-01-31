@@ -39,7 +39,6 @@
     "@types/jest": "^29.2.5",
     "@types/three": "^0.147.1",
     "@types/utm": "^1.1.1",
-    "cross-fetch": "^3.1.5",
     "husky": "^8.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
@@ -48,8 +47,7 @@
     "three": "^0.148.0",
     "ts-jest": "^29.0.3",
     "typedoc": "^0.23.24",
-    "typescript": "^4.9.4",
-    "utm": "^1.1.1"
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "@mapbox/sphericalmercator": "^1.2.0",
