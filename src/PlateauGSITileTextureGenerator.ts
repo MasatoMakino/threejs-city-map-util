@@ -49,7 +49,7 @@ export class PlateauGSITileTextureGenerator {
       region
     );
 
-    await this.saveToFile(
+    return await this.saveToFile(
       meshCode,
       image,
       tileOption.imgDir,
@@ -68,12 +68,11 @@ export class PlateauGSITileTextureGenerator {
     return [meshLatLng.lng, meshLatLng.lat, east, north];
   }
 
-  private static getRegion(
+  private static getInnerRectangle(
     sphericalMercator: SphericalMercator,
-    xyz: XYBounds,
     bbox: BoundingBox,
     tileOption: Required<PlateauGSITileOption>
-  ): Sharp.Region | undefined {
+  ) {
     const px = sphericalMercator.px(
       SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "SouthWest"),
       tileOption.zoomLevel
@@ -82,13 +81,29 @@ export class PlateauGSITileTextureGenerator {
       SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "NorthEast"),
       tileOption.zoomLevel
     );
-    const inner = new Rectangle(px[0], px2[1], px2[0], px[1]);
-    const outer = new Rectangle(
+    return new Rectangle(px[0], px2[1], px2[0], px[1]);
+  }
+
+  private static getOuterRectangle(
+    xyz: XYBounds,
+    tileOption: Required<PlateauGSITileOption>
+  ) {
+    return new Rectangle(
       xyz.minX * tileOption.tileSize,
       xyz.minY * tileOption.tileSize,
       (xyz.maxX + 1) * tileOption.tileSize,
       (xyz.maxY + 1) * tileOption.tileSize
     );
+  }
+
+  private static getRegion(
+    sphericalMercator: SphericalMercator,
+    xyz: XYBounds,
+    bbox: BoundingBox,
+    tileOption: Required<PlateauGSITileOption>
+  ): Sharp.Region | undefined {
+    const inner = this.getInnerRectangle(sphericalMercator, bbox, tileOption);
+    const outer = this.getOuterRectangle(xyz, tileOption);
 
     const region = outer.extract(inner);
     if (
@@ -167,7 +182,7 @@ export class PlateauGSITileTextureGenerator {
     }
     const dir = join(process.cwd(), ...imgDir);
     await mkdir(dir, { recursive: true });
-    await image.toFile(`${dir}/${meshCode}_${zoomLevel}.jpg`);
+    return await image.toFile(`${dir}/${meshCode}_${zoomLevel}.jpg`);
   }
 }
 
