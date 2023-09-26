@@ -2,9 +2,9 @@ import {
   JapanStandardRegionalMeshUtil,
   LatitudeLongitude,
   PositionUtil,
-} from "./";
+} from "./index.js";
 import { Mesh, Vector3 } from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
 export class PlateauModelLoader {
   /**
@@ -12,7 +12,7 @@ export class PlateauModelLoader {
    */
   static async loadObjModel(
     url: string,
-    origin: LatitudeLongitude
+    origin: LatitudeLongitude,
   ): Promise<Mesh | undefined> {
     const txt = await fetch(url);
     const str = await txt.text();
@@ -61,15 +61,15 @@ export class PlateauModelUtil {
   }
 
   public static getZone = (
-    objString: string
+    objString: string,
   ): LatitudeLongitude | undefined => {
     const lat = this.getOrigin(
       objString,
-      /PARAMETER\["latitude_of_origin",([\d\.]+)\]/
+      /PARAMETER\["latitude_of_origin",([\d\.]+)\]/,
     );
     const lng = this.getOrigin(
       objString,
-      /PARAMETER\["central_meridian",([\d\.]+)\]/
+      /PARAMETER\["central_meridian",([\d\.]+)\]/,
     );
     if (lat && lng) {
       return new LatitudeLongitude(lat, lng);
@@ -87,7 +87,7 @@ export class PlateauModelUtil {
 
   public static getShiftMeters = (
     meshCodeLatLng?: LatitudeLongitude,
-    zone?: LatitudeLongitude
+    zone?: LatitudeLongitude,
   ): Vector3 | undefined => {
     if (meshCodeLatLng == null || zone == null) return undefined;
     return PositionUtil.toTransverseMercatorXZ(meshCodeLatLng, zone);

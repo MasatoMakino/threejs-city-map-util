@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { PlateauGSITileTextureGenerator } from "./PlateauGSITileTextureGenerator";
+import { PlateauGSITileTextureGenerator } from "./PlateauGSITileTextureGenerator.js";
 
 const program = new Command();
 program

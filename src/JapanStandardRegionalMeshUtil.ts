@@ -1,4 +1,4 @@
-import { LatitudeLongitude } from "./LatitudeLongitude";
+import { LatitudeLongitude } from "./LatitudeLongitude.js";
 
 /**
  * 総務省統計局制定の基準地域メッシュコードを、緯度経度と相互変換するためのクラスです。
@@ -50,7 +50,7 @@ export class JapanStandardRegionalMeshUtil {
     }
     if (Number.isNaN(Number(mesh))) {
       console.warn(
-        "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。"
+        "メッシュコードが10進数以外で指定されています。変換ができないため、undefinedを返します。",
       );
       return false;
     }
@@ -64,7 +64,7 @@ export class JapanStandardRegionalMeshUtil {
         break;
       default:
         console.warn(
-          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、undefinedを返します。`
+          `メッシュコードの桁数${mesh.length}は不正です。変換ができないため、undefinedを返します。`,
         );
         return false;
     }
@@ -77,7 +77,7 @@ export class JapanStandardRegionalMeshUtil {
     startIndex: number,
     endIndex: number,
     latLngScale: number,
-    shiftLng: number = 0
+    shiftLng: number = 0,
   ): void {
     const centerIndex = startIndex + (endIndex - startIndex) / 2;
     const latCode = code.slice(startIndex, centerIndex);
@@ -89,7 +89,7 @@ export class JapanStandardRegionalMeshUtil {
   private static addQuadrantMeshLatLng(
     latLng: LatitudeLongitude,
     latLngScale: number,
-    code: string
+    code: string,
   ): void {
     if (code === "") return;
     const meshNumber = Number(code);
@@ -101,7 +101,7 @@ export class JapanStandardRegionalMeshUtil {
   }
 
   public static fromLongitudeLatitude(
-    latitudeLongitude: LatitudeLongitude
+    latitudeLongitude: LatitudeLongitude,
   ): string {
     const latLng = latitudeLongitude.clone();
 
@@ -112,13 +112,13 @@ export class JapanStandardRegionalMeshUtil {
     code += this.subQuadKmMeshLatLng(
       latLng,
       this.primaryLatUnit / 8 / 10 / 2,
-      1 / 8 / 10 / 2
+      1 / 8 / 10 / 2,
     );
 
     code += this.subQuadKmMeshLatLng(
       latLng,
       this.primaryLatUnit / 8 / 10 / 2 / 2,
-      1 / 8 / 10 / 2 / 2
+      1 / 8 / 10 / 2 / 2,
     );
 
     return code;
@@ -128,7 +128,7 @@ export class JapanStandardRegionalMeshUtil {
     latLng: LatitudeLongitude,
     unitLat: number,
     unitLng: number,
-    shiftLng: number = 0
+    shiftLng: number = 0,
   ): string {
     const latCode = Math.floor(latLng.lat / unitLat);
     const lngCode = Math.floor(latLng.lng / unitLng - shiftLng);
@@ -140,7 +140,7 @@ export class JapanStandardRegionalMeshUtil {
   private static subQuadKmMeshLatLng(
     latLng: LatitudeLongitude,
     unitLat: number,
-    unitLng: number
+    unitLng: number,
   ): string {
     const flagLat = latLng.lat > unitLat;
     const flagLng = latLng.lng > unitLng;

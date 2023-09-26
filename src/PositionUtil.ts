@@ -1,13 +1,13 @@
-import { LatitudeLongitude } from "./LatitudeLongitude";
+import { LatitudeLongitude } from "./LatitudeLongitude.js";
 import { Vector3 } from "three";
-import { xyzone, latlon2xy } from "./latlonxy";
+import { xyzone, latlon2xy } from "./latlonxy.js";
 /**
  * 各種座標とXYZ座標を変換するユーティリティクラス
  */
 export class PositionUtil {
   static toTransverseMercatorXZ(
     latLng: LatitudeLongitude,
-    origin: LatitudeLongitude
+    origin: LatitudeLongitude,
   ): Vector3 {
     const zone = xyzone(origin.lat, origin.lng);
     const xy = latlon2xy(latLng.lat, latLng.lng, zone);

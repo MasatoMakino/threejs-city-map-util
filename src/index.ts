@@ -1,4 +1,4 @@
-export * from "./JapanStandardRegionalMeshUtil";
-export * from "./LatitudeLongitude";
-export { PlateauModelLoader } from "./PlateauModelLoader";
-export * from "./PositionUtil";
+export * from "./JapanStandardRegionalMeshUtil.js";
+export * from "./LatitudeLongitude.js";
+export { PlateauModelLoader } from "./PlateauModelLoader.js";
+export * from "./PositionUtil.js";

@@ -1,6 +1,16 @@
-import {Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, TextureLoader} from "three";
-import { Common } from "./Common";
-import { LatitudeLongitude, PlateauModelLoader, PositionUtil } from "../";
+import {
+  Mesh,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  SphereGeometry,
+  TextureLoader,
+} from "three";
+import { Common } from "./common.js";
+import {
+  LatitudeLongitude,
+  PlateauModelLoader,
+  PositionUtil,
+} from "../esm/index.js";
 
 export class Demo {
   private renderer;
@@ -25,40 +35,44 @@ export class Demo {
   async load() {
     const origin = new LatitudeLongitude(
       35.65833333333333 + 2 / 3 / 8 / 10 / 2,
-      139.7375 + 1 / 160
+      139.7375 + 1 / 160,
     );
     const model = await PlateauModelLoader.loadObjModel(
       "./53393599_bldg_6677.obj",
-      origin
+      origin,
     );
     const dem = await PlateauModelLoader.loadObjModel(
-        "./53393599_dem_6677.obj",
-        origin
-    )
+      "./53393599_dem_6677.obj",
+      origin,
+    );
 
-    if( dem ){
-      const loader= new TextureLoader();
+    if (dem) {
+      const loader = new TextureLoader();
       const texture = loader.load("./53393599_18.jpg");
-      dem.material = new MeshStandardMaterial({map:texture});
+      dem.material = new MeshStandardMaterial({ map: texture });
       this.scene.add(dem);
     }
     if (model) {
-      model.material = new MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.5})
+      model.material = new MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.5,
+      });
       this.scene.add(model);
 
       const dummy = new Mesh(
         new SphereGeometry(10, 10),
-        new MeshBasicMaterial()
+        new MeshBasicMaterial(),
       );
 
       //東京タワー
       const targetLatLng = new LatitudeLongitude(
         35.65864183184921,
-        139.74544075634395
+        139.74544075634395,
       );
       const targetPos = PositionUtil.toTransverseMercatorXZ(
         targetLatLng,
-        model.userData.origin
+        model.userData.origin,
       );
       dummy.position.copy(targetPos);
       this.scene.add(dummy);

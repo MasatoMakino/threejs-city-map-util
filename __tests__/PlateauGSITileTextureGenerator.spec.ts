@@ -1,5 +1,5 @@
-import { PlateauGSITileTextureGenerator } from "../src/PlateauGSITileTextureGenerator";
-import { fetchImageMock } from "./FetchImageMock";
+import { PlateauGSITileTextureGenerator } from "../src/PlateauGSITileTextureGenerator.js";
+import { fetchImageMock } from "./FetchImageMock.js";
 
 describe("PlateauGSITileTextureGenerator", () => {
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe("PlateauGSITileTextureGenerator", () => {
 
   test("incorrect mesh code", async () => {
     const result = await PlateauGSITileTextureGenerator.generate(
-      "incorrect mesh code"
+      "incorrect mesh code",
     );
     expect(result).toBeUndefined();
   });

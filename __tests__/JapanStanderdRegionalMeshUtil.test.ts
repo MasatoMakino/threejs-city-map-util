@@ -1,15 +1,18 @@
-import { LatitudeLongitude, JapanStandardRegionalMeshUtil } from "../src";
-import { TestMeshCode, TestLatLng } from "./Positions";
+import {
+  LatitudeLongitude,
+  JapanStandardRegionalMeshUtil,
+} from "../src/index.js";
+import { TestMeshCode, TestLatLng } from "./Positions.js";
 
 describe("JapanStandardRegionalMeshUtil", () => {
   const testToLatLng = (
     code: string,
     codeLength: number,
     expectLat: number,
-    expectLng: number
+    expectLng: number,
   ) => {
     const latLng = JapanStandardRegionalMeshUtil.toLatitudeLongitude(
-      code.slice(0, codeLength)
+      code.slice(0, codeLength),
     );
     expect(latLng).toEqual(new LatitudeLongitude(expectLat, expectLng));
   };
@@ -28,17 +31,17 @@ describe("JapanStandardRegionalMeshUtil", () => {
       TestMeshCode + "44",
       10,
       35.66458333333333,
-      139.74687500000002
+      139.74687500000002,
     );
   });
 
   const testSubMesh = (subMeshCode: string) => {
     expect(
-      JapanStandardRegionalMeshUtil.toLatitudeLongitude(TestMeshCode)
+      JapanStandardRegionalMeshUtil.toLatitudeLongitude(TestMeshCode),
     ).toEqual(
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(
-        TestMeshCode + subMeshCode
-      )
+        TestMeshCode + subMeshCode,
+      ),
     );
   };
   test("Half mesh 1 === Standard mesh", () => {
