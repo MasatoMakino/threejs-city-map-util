@@ -27,7 +27,7 @@
     "watch:demo": "npm run demo -- -W",
     "build": "npm run buildTS && npm run demo && npm run typedocs",
     "server": "npx browser-sync ./docs/demo -w",
-    "run_task": "node ./cjs/CLI.js generateTexture '53393599'",
+    "run_task": "node ./esm/CLI.js generateTexture '53393599'",
     "prepare": "husky install"
   },
   "repository": {
