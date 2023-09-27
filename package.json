@@ -19,6 +19,8 @@
   "scripts": {
     "test": "npx jest --silent",
     "coverage": "npm run test -- --coverage",
+    "preversion": "git checkout main && git pull && npm ci && npm test",
+    "postversion": "git add package.json package-lock.json && git checkout -b version/$(git describe --tags --abbrev=0)",
     "start:dev": "npm run server & npm run watch:tsc & npm run watch:demo",
     "buildTS": "tsc",
     "typedocs": "npx typedoc --out ./docs/api src/index.ts",
