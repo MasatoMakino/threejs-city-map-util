@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "module": "ES2022" /* Specify what module code is generated. */,
-    "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
-    "lib": ["ES2021", "DOM"],
+    "module": "node16" /* Specify what module code is generated. */,
+    "moduleResolution": "node16" /* Specify how TypeScript looks up a file from a given module specifier. */,
+    "lib": ["ES2021"],
 
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
     "outDir": "./esm" /* Redirect output structure to the directory. */,

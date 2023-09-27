@@ -1,6 +1,9 @@
 import { Vector3 } from "three";
-import { JapanStandardRegionalMeshUtil, LatitudeLongitude } from "../src";
-import { PlateauModelUtil } from "../src/PlateauModelLoader";
+import {
+  JapanStandardRegionalMeshUtil,
+  LatitudeLongitude,
+} from "../src/index.js";
+import { PlateauModelUtil } from "../src/PlateauModelLoader.js";
 
 describe("PlateauModelUtil", () => {
   const header =
@@ -8,7 +11,7 @@ describe("PlateauModelUtil", () => {
 
   test("file name to mesh code", () => {
     const code = PlateauModelUtil.getMeshCode(
-      "13100_tokyo23-ku_2020_obj_3_op/bldg/lod1/53393599_bldg_6677.obj"
+      "13100_tokyo23-ku_2020_obj_3_op/bldg/lod1/53393599_bldg_6677.obj",
     );
     expect(code).toBe("53393599");
   });
@@ -17,27 +20,27 @@ describe("PlateauModelUtil", () => {
     const filePath = "../demoSrc/53393599_bldg_6677.obj";
     const meshCode = PlateauModelUtil.getMeshCode(filePath);
     const meshLatLng = JapanStandardRegionalMeshUtil.toLatitudeLongitude(
-      meshCode
+      meshCode,
     ) as LatitudeLongitude;
     expect(meshLatLng).toStrictEqual(
-      new LatitudeLongitude(35.65833333333333, 139.7375)
+      new LatitudeLongitude(35.65833333333333, 139.7375),
     );
 
     const zone = PlateauModelUtil.getZone(header);
     expect(PlateauModelUtil.getShiftMeters(meshLatLng, zone)).toEqual(
-      new Vector3(-8676.937623270216, 0, 37901.890132395085)
+      new Vector3(-8676.937623270216, 0, 37901.890132395085),
     );
   });
 
   test("return undefined for incorrect filenames", () => {
     expect(
-      PlateauModelUtil.getMeshCode("incorrect_file_name.obj")
+      PlateauModelUtil.getMeshCode("incorrect_file_name.obj"),
     ).toBeUndefined();
   });
 
   test("return zone", () => {
     expect(PlateauModelUtil.getZone(header)).toEqual(
-      new LatitudeLongitude(36, 139.833333333333)
+      new LatitudeLongitude(36, 139.833333333333),
     );
   });
   test("return undefined for incorrect header", () => {
@@ -47,7 +50,7 @@ describe("PlateauModelUtil", () => {
   test("getShiftMeters return undefined with nullable params", () => {
     expect(PlateauModelUtil.getShiftMeters()).toBeUndefined();
     expect(
-      PlateauModelUtil.getShiftMeters(new LatitudeLongitude())
+      PlateauModelUtil.getShiftMeters(new LatitudeLongitude()),
     ).toBeUndefined();
   });
 });

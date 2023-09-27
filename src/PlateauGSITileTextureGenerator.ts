@@ -6,9 +6,9 @@ import {
   BoundingBox,
   SphericalMercatorUtil,
   XYBounds,
-} from "./SphericalMercatorUtil";
-import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil";
-import { Rectangle } from "./Rectangle";
+} from "./SphericalMercatorUtil.js";
+import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil.js";
+import { Rectangle } from "./Rectangle.js";
 
 /**
  * PlateauモデルのメッシュIDから、そのモデルにスナップするテクスチャを国土地理院タイルを利用して生成する
@@ -19,7 +19,7 @@ import { Rectangle } from "./Rectangle";
 export class PlateauGSITileTextureGenerator {
   public static async generate(
     meshCode: string,
-    option?: PlateauGSITileOption
+    option?: PlateauGSITileOption,
   ) {
     const tileOption = PlateauGSITileOption.init(option);
     const textureSize = this.generateTextureSizeOption(meshCode, tileOption);
@@ -28,25 +28,25 @@ export class PlateauGSITileTextureGenerator {
     const buffers = await this.downloadTiles(
       textureSize.xyz,
       tileOption.style,
-      tileOption.zoomLevel
+      tileOption.zoomLevel,
     );
     const image = await this.jointTile(
       buffers,
       textureSize.xyz.maxX - textureSize.xyz.minX + 1,
       tileOption.tileSize,
-      textureSize.region
+      textureSize.region,
     );
 
     return await this.saveToFile(
       meshCode,
       image,
       tileOption.imgDir,
-      tileOption.zoomLevel
+      tileOption.zoomLevel,
     );
   }
   private static generateTextureSizeOption(
     meshCode: string,
-    tileOption: Required<PlateauGSITileOption>
+    tileOption: Required<PlateauGSITileOption>,
   ) {
     const bbox = this.getBBox(meshCode);
     if (bbox == null) return undefined;
@@ -77,29 +77,29 @@ export class PlateauGSITileTextureGenerator {
   private static getInnerRectangle(
     sphericalMercator: SphericalMercator,
     bbox: BoundingBox,
-    tileOption: Required<PlateauGSITileOption>
+    tileOption: Required<PlateauGSITileOption>,
   ) {
     const px = sphericalMercator.px(
       SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "SouthWest"),
-      tileOption.zoomLevel
+      tileOption.zoomLevel,
     );
     const px2 = sphericalMercator.px(
       SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "NorthEast"),
-      tileOption.zoomLevel
+      tileOption.zoomLevel,
     );
     return new Rectangle(px[0], px2[1], px2[0], px[1]);
   }
 
   private static getOuterRectangle(
     xyz: XYBounds,
-    tileOption: Required<PlateauGSITileOption>
+    tileOption: Required<PlateauGSITileOption>,
   ) {
     const size = tileOption.tileSize;
     return new Rectangle(
       xyz.minX * size,
       xyz.minY * size,
       (xyz.maxX + 1) * size,
-      (xyz.maxY + 1) * size
+      (xyz.maxY + 1) * size,
     );
   }
 
@@ -107,13 +107,13 @@ export class PlateauGSITileTextureGenerator {
     sphericalMercator: SphericalMercator,
     xyz: XYBounds,
     bbox: BoundingBox,
-    tileOption: Required<PlateauGSITileOption>
+    tileOption: Required<PlateauGSITileOption>,
   ): Sharp.Region | undefined {
     const inner = this.getInnerRectangle(sphericalMercator, bbox, tileOption);
     const size = inner.size();
     if (size.width < tileOption.tileSize || size.height < tileOption.tileSize) {
       console.warn(
-        `three-city-map-util : ${size.width} * ${size.height} Output image size is smaller than tile size ${tileOption.tileSize}. Increase zoomLevel. `
+        `three-city-map-util : ${size.width} * ${size.height} Output image size is smaller than tile size ${tileOption.tileSize}. Increase zoomLevel. `,
       );
       return undefined;
     }
@@ -130,7 +130,7 @@ export class PlateauGSITileTextureGenerator {
   private static async downloadTiles(
     xyz: XYBounds,
     style: string,
-    zoomLevel: number
+    zoomLevel: number,
   ) {
     const promises: Promise<any>[] = [];
     for (let y = xyz.minY; y <= xyz.maxY; y++) {
@@ -146,7 +146,7 @@ export class PlateauGSITileTextureGenerator {
     buffers: Buffer[],
     langeX: number,
     tileSize: number,
-    extract: Sharp.Region
+    extract: Sharp.Region,
   ) {
     const image = Sharp({
       create: {
@@ -166,7 +166,7 @@ export class PlateauGSITileTextureGenerator {
           left: x * tileSize - extract.left,
           top: y * tileSize - extract.top,
         };
-      }
+      },
     );
 
     image.composite(compositeBlobs);
@@ -178,7 +178,7 @@ export class PlateauGSITileTextureGenerator {
     meshCode: string,
     image: Sharp.Sharp,
     imgDir: string | string[],
-    zoomLevel: number
+    zoomLevel: number,
   ) {
     if (!Array.isArray(imgDir)) {
       imgDir = [imgDir];
@@ -218,7 +218,7 @@ export class PlateauGSITileOption {
   imgDir?: string | string[];
 
   public static init(
-    option?: PlateauGSITileOption
+    option?: PlateauGSITileOption,
   ): Required<PlateauGSITileOption> {
     option ??= {};
     option.zoomLevel = option?.zoomLevel ?? 16;

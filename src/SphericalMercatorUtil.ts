@@ -1,7 +1,7 @@
 export class SphericalMercatorUtil {
   static cutBBoxToLatLngPoint(
     bbox: BoundingBox,
-    style: "NorthEast" | "SouthWest"
+    style: "NorthEast" | "SouthWest",
   ): LatLngPoint {
     switch (style) {
       case "SouthWest":

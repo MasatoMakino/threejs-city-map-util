@@ -8,7 +8,7 @@ import {
   Scene,
   WebGLRenderer,
 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export class Common {
   static initScene() {
@@ -21,7 +21,13 @@ export class Common {
     return ambientLight;
   }
 
-  static initCamera(scene: Scene, W: number, H: number, near = 0.01, far = 400000000000) {
+  static initCamera(
+    scene: Scene,
+    W: number,
+    H: number,
+    near = 0.01,
+    far = 400000000000,
+  ) {
     const camera = new PerspectiveCamera(45, W / H, near, far);
     camera.position.set(0, 0, 500);
     camera.updateMatrixWorld(false);
@@ -44,7 +50,7 @@ export class Common {
       {
         color: 0x888888,
       },
-      option
+      option,
     );
 
     const renderer = new WebGLRenderer({});
