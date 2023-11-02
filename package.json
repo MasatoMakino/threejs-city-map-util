@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
-    "@masatomakino/gulptask-demo-page": "^0.7.3",
+    "@masatomakino/gulptask-demo-page": "^0.7.4",
     "@types/jest": "^29.5.7",
     "@types/three": "^0.156.0",
     "@types/utm": "^1.1.2",
