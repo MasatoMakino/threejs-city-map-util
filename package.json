@@ -25,7 +25,7 @@
     "buildTS": "tsc",
     "typedocs": "npx typedoc --out ./docs/api src/index.ts",
     "watch:tsc": "tsc -W --incremental",
-    "demo": "npx @masatomakino/gulptask-demo-page --copyTargets 'png','jpg','jpeg','obj'",
+    "demo": "npx @masatomakino/gulptask-demo-page --copyTargets 'png', 'jpg', 'jpeg', 'obj'",
     "watch:demo": "npm run demo -- -W",
     "build": "npm run buildTS && npm run demo && npm run typedocs",
     "server": "npx browser-sync ./docs/demo -w",
