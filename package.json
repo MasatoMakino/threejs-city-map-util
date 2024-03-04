@@ -61,7 +61,7 @@
     "@mapbox/sphericalmercator": "^1.2.0",
     "@types/mapbox__sphericalmercator": "^1.2.3",
     "@types/sharp": "^0.32.0",
-    "commander": "^11.0.0",
+    "commander": "^12.0.0",
     "sharp": "^0.33.2"
   },
   "lint-staged": {
