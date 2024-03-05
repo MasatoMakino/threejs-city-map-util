@@ -3,7 +3,7 @@
     "target": "ES2021",
     "module": "node16" /* Specify what module code is generated. */,
     "moduleResolution": "node16" /* Specify how TypeScript looks up a file from a given module specifier. */,
-    "lib": ["ES2021"],
+    "lib": ["ES2021", "DOM"],
 
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
     "outDir": "./esm" /* Redirect output structure to the directory. */,

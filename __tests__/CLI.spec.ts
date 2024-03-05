@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import fs from "fs";
 import util from "util";
 import child_process from "child_process";
