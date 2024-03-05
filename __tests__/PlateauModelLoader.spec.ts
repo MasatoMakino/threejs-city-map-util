@@ -1,8 +1,9 @@
+import { describe, test, expect, beforeEach, vi } from "vitest";
 import { PlateauModelLoader, LatitudeLongitude } from "../src/index.js";
 import { fetchMock } from "./FetchMock.js";
 describe("PlateauModelLoader", () => {
   beforeEach(() => {
-    global.fetch = jest.fn().mockImplementation(fetchMock);
+    global.fetch = vi.fn().mockImplementation(fetchMock);
   });
 
   test("load obj file", async () => {

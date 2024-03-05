@@ -1,9 +1,10 @@
+import { describe, test, expect, beforeEach, vi } from "vitest";
 import { PlateauGSITileTextureGenerator } from "../src/PlateauGSITileTextureGenerator.js";
 import { fetchImageMock } from "./FetchImageMock.js";
 
 describe("PlateauGSITileTextureGenerator", () => {
   beforeEach(() => {
-    global.fetch = jest.fn().mockImplementation(fetchImageMock);
+    global.fetch = vi.fn().mockImplementation(fetchImageMock);
   });
 
   test("generate", async () => {
