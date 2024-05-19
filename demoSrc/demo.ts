@@ -49,6 +49,7 @@ export class Demo {
     if (dem) {
       const loader = new TextureLoader();
       const texture = loader.load("./53393599_18.jpg");
+      texture.colorSpace = "srgb";
       dem.material = new MeshStandardMaterial({ map: texture });
       this.scene.add(dem);
     }
