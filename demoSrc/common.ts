@@ -16,7 +16,7 @@ export class Common {
   }
 
   static initLight(scene: Scene) {
-    const ambientLight = new AmbientLight(0xffffff, 0.8);
+    const ambientLight = new AmbientLight(0xffffff, Math.PI / 2);
     scene.add(ambientLight);
     return ambientLight;
   }
