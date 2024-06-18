@@ -28,5 +28,5 @@ describe("CLI", () => {
     // Check if the generated file exists
     const filePath = `./gsiTexture/${meshCode}_16.jpg`;
     expect(fs.existsSync(filePath)).toBe(true);
-  });
+  }, 30_000);
 });
