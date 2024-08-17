@@ -1,6 +1,5 @@
 name: Coverage Report
 
-
 on:
   pull_request:
     branches:
@@ -23,6 +22,6 @@ jobs:
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v8.0.0
         env:
-          CC_TEST_REPORTER_ID: 48e8d378d5d163372cdcd150c5503a68533bf6e2b3a167a1ed332eaf7dc939a1
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
           coverageCommand: xvfb-run --auto-servernum npm run coverage
