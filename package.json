@@ -48,7 +48,7 @@
     "@types/three": "^0.168.0",
     "@types/utm": "^1.1.4",
     "@vitest/coverage-istanbul": "^2.0.5",
-    "husky": "^9.1.5",
+    "husky": "^9.1.6",
     "jsdom": "^25.0.0",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
