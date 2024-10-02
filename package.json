@@ -47,7 +47,7 @@
     "@types/node": "^22.7.4",
     "@types/three": "^0.169.0",
     "@types/utm": "^1.1.4",
-    "@vitest/coverage-istanbul": "^2.1.1",
+    "@vitest/coverage-istanbul": "^2.1.2",
     "husky": "^9.1.6",
     "jsdom": "^25.0.1",
     "lint-staged": "^15.2.10",
