@@ -1,4 +1,4 @@
-import SphericalMercator from "@mapbox/sphericalmercator";
+import { SphericalMercator } from "@mapbox/sphericalmercator";
 import { mkdir } from "fs/promises";
 import { join } from "path";
 import Sharp from "sharp";
