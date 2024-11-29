@@ -52,7 +52,7 @@
     "jsdom": "^25.0.1",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.1",
-    "three": "0.170.0",
+    "three": "0.171.0",
     "typedoc": "^0.27.1",
     "typescript": "^5.7.2"
   },
