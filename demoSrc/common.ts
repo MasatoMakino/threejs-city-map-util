@@ -4,7 +4,6 @@ import {
   Camera,
   Color,
   PerspectiveCamera,
-  Renderer,
   Scene,
   WebGLRenderer,
 } from "three";
@@ -35,7 +34,7 @@ export class Common {
     return camera;
   }
 
-  static initControl(camera: Camera, render: Renderer) {
+  static initControl(camera: Camera, render: WebGLRenderer) {
     let domElement;
     if (render) {
       domElement = render.domElement;
