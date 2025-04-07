@@ -54,7 +54,7 @@
     "prettier": "^3.5.3",
     "three": "0.174.0",
     "typedoc": "^0.28.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@mapbox/sphericalmercator": "^2.0.1",
