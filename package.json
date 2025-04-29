@@ -45,14 +45,14 @@
   "devDependencies": {
     "@masatomakino/gulptask-demo-page": "^0.8.5",
     "@types/node": "^22.15.3",
-    "@types/three": "^0.175.0",
+    "@types/three": "^0.176.0",
     "@types/utm": "^1.1.4",
     "@vitest/coverage-istanbul": "^3.1.2",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
-    "three": "0.175.0",
+    "three": "0.176.0",
     "typedoc": "^0.28.3",
     "typescript": "^5.8.3"
   },
