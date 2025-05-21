@@ -59,7 +59,7 @@
   "dependencies": {
     "@mapbox/sphericalmercator": "^2.0.1",
     "@types/mapbox__sphericalmercator": "^1.2.3",
-    "commander": "^13.1.0",
+    "commander": "^14.0.0",
     "sharp": "^0.34.1"
   },
   "lint-staged": {
