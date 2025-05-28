@@ -50,7 +50,7 @@
     "@vitest/coverage-istanbul": "^3.1.4",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.1.0",
     "prettier": "^3.5.3",
     "three": "0.176.0",
     "typedoc": "^0.28.5",
