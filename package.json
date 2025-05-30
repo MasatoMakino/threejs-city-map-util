@@ -44,7 +44,7 @@
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
     "@masatomakino/gulptask-demo-page": "^0.9.0",
-    "@types/node": "^22.15.24",
+    "@types/node": "^22.15.29",
     "@types/three": "^0.176.0",
     "@types/utm": "^1.1.4",
     "@vitest/coverage-istanbul": "^3.1.4",
