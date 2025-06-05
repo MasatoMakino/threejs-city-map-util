@@ -19,8 +19,6 @@
   "scripts": {
     "test": "vitest --run --silent",
     "coverage": "vitest --run --coverage --silent",
-    "preversion": "git checkout main && git pull && npm ci && npm test",
-    "postversion": "git add package.json package-lock.json && git checkout -b version/$(git describe --tags --abbrev=0)",
     "start:dev": "npm run server & npm run watch:tsc & npm run watch:demo",
     "buildTS": "tsc",
     "typedocs": "npx typedoc --out ./docs/api src/index.ts",
@@ -30,7 +28,10 @@
     "build": "npm run buildTS && npm run demo && npm run typedocs",
     "server": "npx browser-sync ./docs/demo -w",
     "run_task": "node ./esm/CLI.js generateTexture '53393599'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preversion": "npx @masatomakino/release-helper preversion",
+    "postversion": "npx @masatomakino/release-helper postversion",
+    "release": "npx @masatomakino/release-helper release"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
     "@masatomakino/gulptask-demo-page": "^0.10.0",
+    "@masatomakino/release-helper": "^0.2.0",
     "@types/node": "^22.15.29",
     "@types/three": "^0.177.0",
     "@types/utm": "^1.1.4",
