@@ -49,7 +49,7 @@
     "@types/node": "^24.0.3",
     "@types/three": "^0.177.0",
     "@types/utm": "^1.1.4",
-    "@vitest/coverage-istanbul": "^3.2.3",
+    "@vitest/coverage-istanbul": "^3.2.4",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
