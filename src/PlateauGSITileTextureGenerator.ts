@@ -2,7 +2,11 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { SphericalMercator } from "@mapbox/sphericalmercator";
 import Sharp from "sharp";
-import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil.js";
+import {
+  MeshCodeLatitudeUnit,
+  MeshCodeLongitudeUnit,
+  toLatitudeLongitude,
+} from "./index.js";
 import { Rectangle } from "./Rectangle.js";
 import {
   type BoundingBox,
@@ -73,13 +77,11 @@ export class PlateauGSITileTextureGenerator {
     };
   }
   private static getBBox(code: string): BoundingBox | undefined {
-    const meshLatLng = JapanStandardRegionalMeshUtil.toLatitudeLongitude(code);
+    const meshLatLng = toLatitudeLongitude(code);
     if (meshLatLng == null) return;
 
-    const north =
-      meshLatLng.lat + JapanStandardRegionalMeshUtil.MeshCodeLatitudeUnit;
-    const east =
-      meshLatLng.lng + JapanStandardRegionalMeshUtil.MeshCodeLongitudeUnit;
+    const north = meshLatLng.lat + MeshCodeLatitudeUnit;
+    const east = meshLatLng.lng + MeshCodeLongitudeUnit;
     return [meshLatLng.lng, meshLatLng.lat, east, north];
   }
 
