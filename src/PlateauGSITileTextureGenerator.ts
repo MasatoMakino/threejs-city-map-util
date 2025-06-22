@@ -10,7 +10,7 @@ import {
 import { Rectangle } from "./Rectangle.js";
 import {
   type BoundingBox,
-  SphericalMercatorUtil,
+  cutBBoxToLatLngPoint,
   type XYBounds,
 } from "./SphericalMercatorUtil.js";
 
@@ -91,11 +91,11 @@ export class PlateauGSITileTextureGenerator {
     tileOption: Required<PlateauGSITileOption>,
   ) {
     const px = sphericalMercator.px(
-      SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "SouthWest"),
+      cutBBoxToLatLngPoint(bbox, "SouthWest"),
       tileOption.zoomLevel,
     );
     const px2 = sphericalMercator.px(
-      SphericalMercatorUtil.cutBBoxToLatLngPoint(bbox, "NorthEast"),
+      cutBBoxToLatLngPoint(bbox, "NorthEast"),
       tileOption.zoomLevel,
     );
     return new Rectangle(px[0], px2[1], px2[0], px[1]);
