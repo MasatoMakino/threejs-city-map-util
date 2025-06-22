@@ -6,7 +6,13 @@ export * from "./JapanStandardRegionalMeshUtil.js";
  */
 export * as JapanStandardRegionalMeshUtil from "./JapanStandardRegionalMeshUtil.js";
 export * from "./LatitudeLongitude.js";
-export { PlateauModelLoader } from "./PlateauModelLoader.js";
+export * from "./PlateauModelLoader.js";
+/**
+ * @deprecated This namespace import is deprecated. Instead, import individual functions or
+ * import the entire module. Examples:
+ * import { loadAndOrientPlateauModel } from "@masatomakino/threejs-city-map-util";
+ */
+export * as PlateauModelLoader from "./PlateauModelLoader.js";
 export * from "./PositionUtil.js";
 /**
  * @deprecated This namespace import is deprecated. Instead, import individual functions or
