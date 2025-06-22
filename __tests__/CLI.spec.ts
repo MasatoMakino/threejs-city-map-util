@@ -21,7 +21,7 @@ describe("CLI", () => {
 
   it("should create a texture for the specified mesh code using CLI", async () => {
     const meshCode = "53393599";
-    const { stdout, stderr } = await exec(
+    const { stderr } = await exec(
       `node ./esm/CLI.js generateTexture ${meshCode}`,
     );
     expect(stderr).toBe("");
