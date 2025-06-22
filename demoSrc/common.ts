@@ -43,7 +43,15 @@ export function initControl(camera: Camera, render: WebGLRenderer) {
   return control;
 }
 
-export function initRenderer(W: number, H: number, option: any) {
+interface RendererOptions {
+  color?: number;
+}
+
+export function initRenderer(
+  W: number,
+  H: number,
+  option: RendererOptions = {},
+) {
   option = Object.assign(
     {
       color: 0x888888,
