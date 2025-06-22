@@ -150,7 +150,7 @@ export class PlateauGSITileTextureGenerator {
     style: string,
     zoomLevel: number,
   ) {
-    const promises: Promise<any>[] = [];
+    const promises: Promise<Buffer>[] = [];
     for (let y = xyz.minY; y <= xyz.maxY; y++) {
       for (let x = xyz.minX; x <= xyz.maxX; x++) {
         const url = `https://cyberjapandata.gsi.go.jp/xyz/${style}/${zoomLevel}/${x}/${y}.jpg`;
