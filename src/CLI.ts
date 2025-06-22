@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { PlateauGSITileTextureGenerator } from "./PlateauGSITileTextureGenerator.js";
+import { generatePlateauGSITileTexture } from "./PlateauGSITileTextureGenerator.js";
 
 const program = new Command();
 program
@@ -10,7 +10,7 @@ program
   .option("--zoomLevel <number>")
   .option("--style <string>")
   .action((meshCode, options) => {
-    PlateauGSITileTextureGenerator.generate(meshCode, {
+    generatePlateauGSITileTexture(meshCode, {
       zoomLevel: options.zoomLevel,
       style: options.style,
     });
