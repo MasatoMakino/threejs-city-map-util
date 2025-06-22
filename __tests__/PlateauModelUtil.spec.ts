@@ -4,7 +4,7 @@ import {
   JapanStandardRegionalMeshUtil,
   LatitudeLongitude,
 } from "../src/index.js";
-import { PlateauModelUtil } from "../src/PlateauModelLoader.js";
+import { PlateauModelUtil } from "../src/PlateauModelUtil.js";
 
 describe("PlateauModelUtil", () => {
   const header =
