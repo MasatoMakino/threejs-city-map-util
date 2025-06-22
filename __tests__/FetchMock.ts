@@ -1,4 +1,4 @@
-export const fetchMock = async (url: string) => {
+export const fetchMock = async () => {
   return {
     ok: true,
     status: 200,
