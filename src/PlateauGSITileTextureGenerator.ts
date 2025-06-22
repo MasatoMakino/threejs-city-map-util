@@ -1,14 +1,14 @@
+import { mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import { SphericalMercator } from "@mapbox/sphericalmercator";
-import { mkdir } from "fs/promises";
-import { join } from "path";
 import Sharp from "sharp";
-import {
-  BoundingBox,
-  SphericalMercatorUtil,
-  XYBounds,
-} from "./SphericalMercatorUtil.js";
 import { JapanStandardRegionalMeshUtil } from "./JapanStandardRegionalMeshUtil.js";
 import { Rectangle } from "./Rectangle.js";
+import {
+  type BoundingBox,
+  SphericalMercatorUtil,
+  type XYBounds,
+} from "./SphericalMercatorUtil.js";
 
 /**
  * PlateauモデルのメッシュIDから、そのモデルにスナップするテクスチャを国土地理院タイルを利用して生成する
@@ -22,22 +22,26 @@ export class PlateauGSITileTextureGenerator {
     option?: PlateauGSITileOption,
   ) {
     const tileOption = PlateauGSITileOption.init(option);
-    const textureSize = this.generateTextureSizeOption(meshCode, tileOption);
+    const textureSize =
+      PlateauGSITileTextureGenerator.generateTextureSizeOption(
+        meshCode,
+        tileOption,
+      );
     if (textureSize == null) return undefined;
 
-    const buffers = await this.downloadTiles(
+    const buffers = await PlateauGSITileTextureGenerator.downloadTiles(
       textureSize.xyz,
       tileOption.style,
       tileOption.zoomLevel,
     );
-    const image = await this.jointTile(
+    const image = await PlateauGSITileTextureGenerator.jointTile(
       buffers,
       textureSize.xyz.maxX - textureSize.xyz.minX + 1,
       tileOption.tileSize,
       textureSize.region,
     );
 
-    return await this.saveToFile(
+    return await PlateauGSITileTextureGenerator.saveToFile(
       meshCode,
       image,
       tileOption.imgDir,
@@ -48,14 +52,19 @@ export class PlateauGSITileTextureGenerator {
     meshCode: string,
     tileOption: Required<PlateauGSITileOption>,
   ) {
-    const bbox = this.getBBox(meshCode);
+    const bbox = PlateauGSITileTextureGenerator.getBBox(meshCode);
     if (bbox == null) return undefined;
 
     const sphericalMercator = new SphericalMercator({
       size: tileOption.tileSize,
     });
     const xyz = sphericalMercator.xyz(bbox, tileOption.zoomLevel);
-    const region = this.getRegion(sphericalMercator, xyz, bbox, tileOption);
+    const region = PlateauGSITileTextureGenerator.getRegion(
+      sphericalMercator,
+      xyz,
+      bbox,
+      tileOption,
+    );
     if (xyz == null || region == null) return undefined;
 
     return {
@@ -109,7 +118,11 @@ export class PlateauGSITileTextureGenerator {
     bbox: BoundingBox,
     tileOption: Required<PlateauGSITileOption>,
   ): Sharp.Region | undefined {
-    const inner = this.getInnerRectangle(sphericalMercator, bbox, tileOption);
+    const inner = PlateauGSITileTextureGenerator.getInnerRectangle(
+      sphericalMercator,
+      bbox,
+      tileOption,
+    );
     const size = inner.size();
     if (size.width < tileOption.tileSize || size.height < tileOption.tileSize) {
       console.warn(
@@ -118,7 +131,10 @@ export class PlateauGSITileTextureGenerator {
       return undefined;
     }
 
-    const outer = this.getOuterRectangle(xyz, tileOption);
+    const outer = PlateauGSITileTextureGenerator.getOuterRectangle(
+      xyz,
+      tileOption,
+    );
     return outer.extract(inner);
   }
   private static async getImage(url: string): Promise<Buffer> {
@@ -136,7 +152,7 @@ export class PlateauGSITileTextureGenerator {
     for (let y = xyz.minY; y <= xyz.maxY; y++) {
       for (let x = xyz.minX; x <= xyz.maxX; x++) {
         const url = `https://cyberjapandata.gsi.go.jp/xyz/${style}/${zoomLevel}/${x}/${y}.jpg`;
-        promises.push(this.getImage(url));
+        promises.push(PlateauGSITileTextureGenerator.getImage(url));
       }
     }
     return await Promise.all<Buffer>(promises);

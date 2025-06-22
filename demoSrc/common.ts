@@ -1,7 +1,7 @@
 import {
   AmbientLight,
   AxesHelper,
-  Camera,
+  type Camera,
   Color,
   PerspectiveCamera,
   Scene,
@@ -35,7 +35,7 @@ export class Common {
   }
 
   static initControl(camera: Camera, render: WebGLRenderer) {
-    let domElement;
+    let domElement: HTMLElement | null | undefined;
     if (render) {
       domElement = render.domElement;
     }

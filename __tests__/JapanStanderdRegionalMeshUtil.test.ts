@@ -1,9 +1,9 @@
-import { describe, test, expect } from "vitest";
+import { describe, expect, test } from "vitest";
 import {
-  LatitudeLongitude,
   JapanStandardRegionalMeshUtil,
+  LatitudeLongitude,
 } from "../src/index.js";
-import { TestMeshCode, TestLatLng } from "./Positions.js";
+import { TestLatLng, TestMeshCode } from "./Positions.js";
 
 describe("JapanStandardRegionalMeshUtil", () => {
   const testToLatLng = (
@@ -29,7 +29,7 @@ describe("JapanStandardRegionalMeshUtil", () => {
   });
   test("Quad mesh 44 to lat-lng", () => {
     testToLatLng(
-      TestMeshCode + "44",
+      `${TestMeshCode}44`,
       10,
       35.66458333333333,
       139.74687500000002,

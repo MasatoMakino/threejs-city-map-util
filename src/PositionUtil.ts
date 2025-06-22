@@ -1,6 +1,6 @@
-import { LatitudeLongitude } from "./LatitudeLongitude.js";
 import { Vector3 } from "three";
-import { xyzone, latlon2xy } from "./latlonxy.js";
+import type { LatitudeLongitude } from "./LatitudeLongitude.js";
+import { latlon2xy, xyzone } from "./latlonxy.js";
 /**
  * 各種座標とXYZ座標を変換するユーティリティクラス
  */

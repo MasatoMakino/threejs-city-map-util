@@ -1,11 +1,11 @@
-import { describe, test, expect } from "vitest";
 import { Vector3 } from "three";
-import { TestLatLng, TestMeshCode } from "./Positions.js";
+import { describe, expect, test } from "vitest";
 import {
   JapanStandardRegionalMeshUtil,
+  type LatitudeLongitude,
   PositionUtil,
-  LatitudeLongitude,
 } from "../src/index.js";
+import { TestLatLng, TestMeshCode } from "./Positions.js";
 
 describe("PositionUtil", () => {
   test("XZ location of Tokyo Tower on the Plateau model", () => {

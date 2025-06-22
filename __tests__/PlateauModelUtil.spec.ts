@@ -1,5 +1,5 @@
-import { describe, test, expect } from "vitest";
 import { Vector3 } from "three";
+import { describe, expect, test } from "vitest";
 import {
   JapanStandardRegionalMeshUtil,
   LatitudeLongitude,

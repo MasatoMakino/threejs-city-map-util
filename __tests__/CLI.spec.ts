@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
-import fs from "fs";
-import util from "util";
-import child_process from "child_process";
+import child_process from "node:child_process";
+import fs from "node:fs";
+import util from "node:util";
+import { describe, expect, it } from "vitest";
+
 const exec = util.promisify(child_process.exec);
 
 describe("CLI", () => {

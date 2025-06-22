@@ -1,10 +1,10 @@
+import type { Mesh, Vector3 } from "three";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import {
   JapanStandardRegionalMeshUtil,
   LatitudeLongitude,
   PositionUtil,
 } from "./index.js";
-import { Mesh, Vector3 } from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
 export class PlateauModelLoader {
   /**
@@ -65,11 +65,11 @@ export class PlateauModelUtil {
   ): LatitudeLongitude | undefined => {
     const lat = this.getOrigin(
       objString,
-      /PARAMETER\["latitude_of_origin",([\d\.]+)\]/,
+      /PARAMETER\["latitude_of_origin",([\d.]+)\]/,
     );
     const lng = this.getOrigin(
       objString,
-      /PARAMETER\["central_meridian",([\d\.]+)\]/,
+      /PARAMETER\["central_meridian",([\d.]+)\]/,
     );
     if (lat && lng) {
       return new LatitudeLongitude(lat, lng);

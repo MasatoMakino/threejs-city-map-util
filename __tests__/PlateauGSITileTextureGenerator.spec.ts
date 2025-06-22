@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { PlateauGSITileTextureGenerator } from "../src/PlateauGSITileTextureGenerator.js";
 import { fetchImageMock } from "./FetchImageMock.js";
 

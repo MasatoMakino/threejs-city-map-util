@@ -28,18 +28,26 @@ export class JapanStandardRegionalMeshUtil {
    * @param mesh
    */
   static toLatitudeLongitude(mesh?: string): LatitudeLongitude | undefined {
-    if (mesh == null || !this.validateMeshCode(mesh)) {
+    if (mesh == null || !JapanStandardRegionalMeshUtil.validateMeshCode(mesh)) {
       return undefined;
     }
 
     const latLng = new LatitudeLongitude();
 
-    this.addLatLng(latLng, mesh, 0, 4, 1, 100);
-    this.addLatLng(latLng, mesh, 4, 6, 1 / 8);
-    this.addLatLng(latLng, mesh, 6, 8, 1 / 8 / 10);
+    JapanStandardRegionalMeshUtil.addLatLng(latLng, mesh, 0, 4, 1, 100);
+    JapanStandardRegionalMeshUtil.addLatLng(latLng, mesh, 4, 6, 1 / 8);
+    JapanStandardRegionalMeshUtil.addLatLng(latLng, mesh, 6, 8, 1 / 8 / 10);
 
-    this.addQuadrantMeshLatLng(latLng, 1 / 2, mesh.slice(8, 9));
-    this.addQuadrantMeshLatLng(latLng, 1 / 2 / 2, mesh.slice(9, 10));
+    JapanStandardRegionalMeshUtil.addQuadrantMeshLatLng(
+      latLng,
+      1 / 2,
+      mesh.slice(8, 9),
+    );
+    JapanStandardRegionalMeshUtil.addQuadrantMeshLatLng(
+      latLng,
+      1 / 2 / 2,
+      mesh.slice(9, 10),
+    );
 
     return latLng;
   }
@@ -83,7 +91,10 @@ export class JapanStandardRegionalMeshUtil {
     const latCode = code.slice(startIndex, centerIndex);
     const lngCode = code.slice(centerIndex, endIndex);
     if (latCode === "" || lngCode === "") return;
-    latLng.lat += Number(latCode) * this.primaryLatUnit * latLngScale;
+    latLng.lat +=
+      Number(latCode) *
+      JapanStandardRegionalMeshUtil.primaryLatUnit *
+      latLngScale;
     latLng.lng += Number(lngCode) * latLngScale + shiftLng;
   }
   private static addQuadrantMeshLatLng(
@@ -95,9 +106,14 @@ export class JapanStandardRegionalMeshUtil {
     const meshNumber = Number(code);
     if (meshNumber > 4) return;
 
-    latLng.lat += meshNumber > 2 ? this.MeshCodeLatitudeUnit * latLngScale : 0;
+    latLng.lat +=
+      meshNumber > 2
+        ? JapanStandardRegionalMeshUtil.MeshCodeLatitudeUnit * latLngScale
+        : 0;
     latLng.lng +=
-      meshNumber % 2 === 0 ? this.MeshCodeLongitudeUnit * latLngScale : 0;
+      meshNumber % 2 === 0
+        ? JapanStandardRegionalMeshUtil.MeshCodeLongitudeUnit * latLngScale
+        : 0;
   }
 
   public static fromLongitudeLatitude(
@@ -105,19 +121,32 @@ export class JapanStandardRegionalMeshUtil {
   ): string {
     const latLng = latitudeLongitude.clone();
 
-    let code = this.subLatLng(latLng, this.primaryLatUnit, 1, 100);
-    code += this.subLatLng(latLng, this.primaryLatUnit / 8, 1 / 8);
-    code += this.subLatLng(latLng, this.primaryLatUnit / 8 / 10, 1 / 8 / 10);
-
-    code += this.subQuadKmMeshLatLng(
+    let code = JapanStandardRegionalMeshUtil.subLatLng(
       latLng,
-      this.primaryLatUnit / 8 / 10 / 2,
+      JapanStandardRegionalMeshUtil.primaryLatUnit,
+      1,
+      100,
+    );
+    code += JapanStandardRegionalMeshUtil.subLatLng(
+      latLng,
+      JapanStandardRegionalMeshUtil.primaryLatUnit / 8,
+      1 / 8,
+    );
+    code += JapanStandardRegionalMeshUtil.subLatLng(
+      latLng,
+      JapanStandardRegionalMeshUtil.primaryLatUnit / 8 / 10,
+      1 / 8 / 10,
+    );
+
+    code += JapanStandardRegionalMeshUtil.subQuadKmMeshLatLng(
+      latLng,
+      JapanStandardRegionalMeshUtil.primaryLatUnit / 8 / 10 / 2,
       1 / 8 / 10 / 2,
     );
 
-    code += this.subQuadKmMeshLatLng(
+    code += JapanStandardRegionalMeshUtil.subQuadKmMeshLatLng(
       latLng,
-      this.primaryLatUnit / 8 / 10 / 2 / 2,
+      JapanStandardRegionalMeshUtil.primaryLatUnit / 8 / 10 / 2 / 2,
       1 / 8 / 10 / 2 / 2,
     );
 

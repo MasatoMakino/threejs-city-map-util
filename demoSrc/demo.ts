@@ -5,12 +5,12 @@ import {
   SphereGeometry,
   TextureLoader,
 } from "three";
-import { Common } from "./common.js";
 import {
   LatitudeLongitude,
   PlateauModelLoader,
   PositionUtil,
 } from "../esm/index.js";
+import { Common } from "./common.js";
 
 export class Demo {
   private renderer;
