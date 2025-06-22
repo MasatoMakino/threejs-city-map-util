@@ -5,7 +5,7 @@ import {
   type LatitudeLongitude,
   toTransverseMercatorXZ,
 } from "./index.js";
-import { PlateauModelUtil } from "./PlateauModelUtil.js";
+import { getMeshCode, getShiftMeters, getZone } from "./PlateauModelUtil.js";
 
 export class PlateauModelLoader {
   /**
@@ -18,11 +18,11 @@ export class PlateauModelLoader {
     const txt = await fetch(url);
     const str = await txt.text();
 
-    const meshCode = PlateauModelUtil.getMeshCode(url);
+    const meshCode = getMeshCode(url);
     const meshCodeLatLng =
       JapanStandardRegionalMeshUtil.toLatitudeLongitude(meshCode);
-    const zone = PlateauModelUtil.getZone(str);
-    const shift = PlateauModelUtil.getShiftMeters(meshCodeLatLng, zone);
+    const zone = getZone(str);
+    const shift = getShiftMeters(meshCodeLatLng, zone);
     if (meshCodeLatLng == null || shift == null) {
       return undefined;
     }
