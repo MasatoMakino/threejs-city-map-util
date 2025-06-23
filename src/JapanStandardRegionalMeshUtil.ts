@@ -36,12 +36,12 @@ export function toLatitudeLongitude(
 
   const latLng = new LatitudeLongitude();
 
-  addLatLng(latLng, mesh, 0, 4, 1, 100);
-  addLatLng(latLng, mesh, 4, 6, 1 / 8);
-  addLatLng(latLng, mesh, 6, 8, 1 / 8 / 10);
+  applyMeshCodeSegmentToLatLng(latLng, mesh, 0, 4, 1, 100);
+  applyMeshCodeSegmentToLatLng(latLng, mesh, 4, 6, 1 / 8);
+  applyMeshCodeSegmentToLatLng(latLng, mesh, 6, 8, 1 / 8 / 10);
 
-  addQuadrantMeshLatLng(latLng, 1 / 2, mesh.slice(8, 9));
-  addQuadrantMeshLatLng(latLng, 1 / 2 / 2, mesh.slice(9, 10));
+  applyQuadrantMeshCodeToLatLng(latLng, 1 / 2, mesh.slice(8, 9));
+  applyQuadrantMeshCodeToLatLng(latLng, 1 / 2 / 2, mesh.slice(9, 10));
 
   return latLng;
 }
@@ -73,7 +73,16 @@ function validateMeshCode(mesh?: string): boolean {
   return true;
 }
 
-function addLatLng(
+/**
+ * メッシュコードの指定された部分から緯度経度を計算し、既存の緯度経度オブジェクトに加算します。
+ * @param latLng - 更新する緯度経度オブジェクト。
+ * @param code - メッシュコード文字列。
+ * @param startIndex - メッシュコードの開始インデックス。
+ * @param endIndex - メッシュコードの終了インデックス。
+ * @param latLngScale - 緯度経度のスケールファクター。
+ * @param shiftLng - 経度のシフト値。
+ */
+function applyMeshCodeSegmentToLatLng(
   latLng: LatitudeLongitude,
   code: string,
   startIndex: number,
@@ -89,7 +98,13 @@ function addLatLng(
   latLng.lng += Number(lngCode) * latLngScale + shiftLng;
 }
 
-function addQuadrantMeshLatLng(
+/**
+ * 四次メッシュコード（象限メッシュ）から緯度経度を計算し、既存の緯度経度オブジェクトに加算します。
+ * @param latLng - 更新する緯度経度オブジェクト。
+ * @param latLngScale - 緯度経度のスケールファクター。
+ * @param code - 四次メッシュコード文字列。
+ */
+function applyQuadrantMeshCodeToLatLng(
   latLng: LatitudeLongitude,
   latLngScale: number,
   code: string,
@@ -107,17 +122,21 @@ export function fromLongitudeLatitude(
 ): string {
   const latLng = latitudeLongitude.clone();
 
-  let code = subLatLng(latLng, primaryLatUnit, 1, 100);
-  code += subLatLng(latLng, primaryLatUnit / 8, 1 / 8);
-  code += subLatLng(latLng, primaryLatUnit / 8 / 10, 1 / 8 / 10);
+  let code = extractLatLngToMeshCodeSegment(latLng, primaryLatUnit, 1, 100);
+  code += extractLatLngToMeshCodeSegment(latLng, primaryLatUnit / 8, 1 / 8);
+  code += extractLatLngToMeshCodeSegment(
+    latLng,
+    primaryLatUnit / 8 / 10,
+    1 / 8 / 10,
+  );
 
-  code += subQuadKmMeshLatLng(
+  code += extractQuadrantMeshCodeFromLatLng(
     latLng,
     primaryLatUnit / 8 / 10 / 2,
     1 / 8 / 10 / 2,
   );
 
-  code += subQuadKmMeshLatLng(
+  code += extractQuadrantMeshCodeFromLatLng(
     latLng,
     primaryLatUnit / 8 / 10 / 2 / 2,
     1 / 8 / 10 / 2 / 2,
@@ -126,7 +145,15 @@ export function fromLongitudeLatitude(
   return code;
 }
 
-function subLatLng(
+/**
+ * 緯度経度からメッシュコードの指定された部分を抽出し、対応する緯度経度を減算します。
+ * @param latLng - 更新する緯度経度オブジェクト。
+ * @param unitLat - 緯度の単位。
+ * @param unitLng - 経度の単位。
+ * @param shiftLng - 経度のシフト値。
+ * @returns 抽出されたメッシュコードの文字列。
+ */
+function extractLatLngToMeshCodeSegment(
   latLng: LatitudeLongitude,
   unitLat: number,
   unitLng: number,
@@ -139,7 +166,14 @@ function subLatLng(
   return `${latCode}${lngCode}`;
 }
 
-function subQuadKmMeshLatLng(
+/**
+ * 緯度経度から四次メッシュコード（象限メッシュ）を抽出し、対応する緯度経度を減算します。
+ * @param latLng - 更新する緯度経度オブジェクト。
+ * @param unitLat - 緯度の単位。
+ * @param unitLng - 経度の単位。
+ * @returns 抽出された四次メッシュコードの文字列。
+ */
+function extractQuadrantMeshCodeFromLatLng(
   latLng: LatitudeLongitude,
   unitLat: number,
   unitLng: number,
