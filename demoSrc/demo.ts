@@ -30,7 +30,7 @@ export class Demo {
     this.scene = initScene();
     initLight(this.scene);
     this.camera = initCamera(this.scene, W, H);
-    this.renderer = initRenderer(W, H, { antialias: false });
+    this.renderer = initRenderer(W, H, {});
     initControl(this.camera, this.renderer);
     initHelper(this.scene);
 
