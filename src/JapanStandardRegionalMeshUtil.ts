@@ -111,7 +111,7 @@ function applyQuadrantMeshCodeToLatLng(
 ): void {
   if (code === "") return;
   const meshNumber = Number(code);
-  if (meshNumber > 4) return;
+  if (meshNumber < 1 || meshNumber > 4) return;
 
   latLng.lat += meshNumber > 2 ? MeshCodeLatitudeUnit * latLngScale : 0;
   latLng.lng += meshNumber % 2 === 0 ? MeshCodeLongitudeUnit * latLngScale : 0;
