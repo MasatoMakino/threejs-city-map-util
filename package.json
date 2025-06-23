@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
+    "@biomejs/biome": "2.0.4",
     "@masatomakino/gulptask-demo-page": "^0.10.0",
     "@masatomakino/release-helper": "^0.2.0",
     "@types/node": "^24.0.3",
@@ -53,7 +54,6 @@
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
-    "prettier": "^3.5.3",
     "three": "0.177.0",
     "typedoc": "^0.28.5",
     "typescript": "^5.8.3"
@@ -65,6 +65,6 @@
     "sharp": "^0.34.2"
   },
   "lint-staged": {
-    "*.{js,ts,css,md}": "prettier --write"
+    "*.{js,ts,css,md}": "biome check --write"
   }
 }

@@ -1,20 +1,19 @@
-export class SphericalMercatorUtil {
-  static cutBBoxToLatLngPoint(
-    bbox: BoundingBox,
-    style: "NorthEast" | "SouthWest",
-  ): LatLngPoint {
-    switch (style) {
-      case "SouthWest":
-        return [bbox[0], bbox[1]];
-      case "NorthEast":
-        return [bbox[2], bbox[3]];
-    }
+/**
+ * Utility functions for handling spherical mercator projections and bounding boxes.
+ */
+
+export function cutBBoxToLatLngPoint(
+  bbox: BoundingBox,
+  style: "NorthEast" | "SouthWest",
+): LatLngPoint {
+  switch (style) {
+    case "SouthWest":
+      return [bbox[0], bbox[1]];
+    case "NorthEast":
+      return [bbox[2], bbox[3]];
   }
 }
 
-/**
- * TODO : PR export interface
- */
 export interface XYBounds {
   minX: number;
   minY: number;

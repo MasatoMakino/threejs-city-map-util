@@ -1,10 +1,10 @@
-import Sharp from "sharp";
+import type Sharp from "sharp";
 export class Rectangle {
   constructor(
     public x1: number,
     public y1: number,
     public x2: number,
-    public y2: number
+    public y2: number,
   ) {}
 
   extract(inner: Rectangle): Sharp.Region {

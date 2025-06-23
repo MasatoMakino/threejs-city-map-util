@@ -5,12 +5,19 @@ import {
   SphereGeometry,
   TextureLoader,
 } from "three";
-import { Common } from "./common.js";
 import {
   LatitudeLongitude,
   PlateauModelLoader,
   PositionUtil,
 } from "../esm/index.js";
+import {
+  initCamera,
+  initControl,
+  initHelper,
+  initLight,
+  initRenderer,
+  initScene,
+} from "./common.js";
 
 export class Demo {
   private renderer;
@@ -20,12 +27,12 @@ export class Demo {
     const W = 1280;
     const H = 640;
 
-    this.scene = Common.initScene();
-    Common.initLight(this.scene);
-    this.camera = Common.initCamera(this.scene, W, H);
-    this.renderer = Common.initRenderer(W, H, { antialias: false });
-    Common.initControl(this.camera, this.renderer);
-    Common.initHelper(this.scene);
+    this.scene = initScene();
+    initLight(this.scene);
+    this.camera = initCamera(this.scene, W, H);
+    this.renderer = initRenderer(W, H, {});
+    initControl(this.camera, this.renderer);
+    initHelper(this.scene);
 
     this.load();
 
