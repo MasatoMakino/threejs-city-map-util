@@ -45,7 +45,7 @@
   "homepage": "https://github.com/MasatoMakino/threejs-city-map-util#readme",
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
-    "@masatomakino/gulptask-demo-page": "^0.10.0",
+    "@masatomakino/gulptask-demo-page": "^0.10.1",
     "@masatomakino/release-helper": "^0.2.0",
     "@types/node": "^24.0.6",
     "@types/three": "^0.177.0",
