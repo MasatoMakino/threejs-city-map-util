@@ -62,7 +62,7 @@
     "@mapbox/sphericalmercator": "^2.0.1",
     "@types/mapbox__sphericalmercator": "^1.2.3",
     "commander": "^14.0.0",
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.3"
   },
   "lint-staged": {
     "*.{js,ts,css,md}": "biome check --write"
