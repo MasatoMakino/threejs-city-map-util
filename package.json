@@ -47,7 +47,7 @@
     "@biomejs/biome": "2.1.4",
     "@masatomakino/gulptask-demo-page": "^0.10.1",
     "@masatomakino/release-helper": "^0.2.0",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.2.1",
     "@types/three": "^0.178.1",
     "@types/utm": "^1.1.4",
     "@vitest/coverage-istanbul": "^3.2.4",
