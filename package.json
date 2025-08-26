@@ -56,7 +56,7 @@
     "lint-staged": "^16.1.5",
     "three": "0.178.0",
     "typedoc": "^0.28.11",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@mapbox/sphericalmercator": "^2.0.1",
